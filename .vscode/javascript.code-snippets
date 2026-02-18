@@ -1,0 +1,16 @@
+{
+  "className attribute": {
+    "prefix": "cn",
+    "body": [
+      "className=\"$1\""
+    ],
+    "description": "Insert className attribute"
+  },
+  "className with value": {
+    "prefix": "cnv",
+    "body": [
+      "className=\"${1:value}\""
+    ],
+    "description": "Insert className attribute with placeholder value"
+  }
+}
