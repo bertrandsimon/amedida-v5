@@ -1,12 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 
 export default function TestDestinationsPage() {
-  const searchParams = useSearchParams();
-  const flightType = searchParams.get("flight_type");
-  const season = searchParams.get("season");
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -16,17 +13,7 @@ export default function TestDestinationsPage() {
 
     const load = async () => {
       try {
-        const params = new URLSearchParams();
-        if (flightType) {
-          params.set("flight_type", flightType);
-        }
-        if (season) {
-          params.set("season", season);
-        }
-        const query = params.toString();
-        const res = await fetch(
-          query ? `/api/destinations?${query}` : "/api/destinations",
-        );
+        const res = await fetch("/api/destinations?all=true");
         if (!res.ok) {
           throw new Error("Failed to load destinations.");
         }
@@ -49,21 +36,13 @@ export default function TestDestinationsPage() {
     return () => {
       isMounted = false;
     };
-  }, [flightType, season]);
+  }, []);
 
   return (
     <div className="mx-auto max-w-[1200px] p-4 sm:p-6 lg:p-10 text-white">
       <h1 className="text-2xl sm:text-3xl font-semibold mb-4">
         Destinations (Test)
       </h1>
-      {(flightType || season) && (
-        <div className="text-xs sm:text-sm text-[#9d9d9d] mb-4">
-          Filtres:{" "}
-          {flightType ? `type=${flightType}` : "type=tous"} •{" "}
-          {season ? `saison=${season}` : "saison=toutes"}
-        </div>
-      )}
-
       {loading && <p className="text-sm text-[#c2c2c2]">Loading...</p>}
       {error && <p className="text-sm text-red-400">{error}</p>}
 
@@ -82,6 +61,61 @@ export default function TestDestinationsPage() {
                   {dest.zone} • {dest.transport_type} • {dest.duration}
                 </div>
                 <div className="text-xs text-[#9d9d9d]">{dest._id}</div>
+              </div>
+
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <div className="relative h-[160px] sm:h-[180px] w-full overflow-hidden rounded-lg border border-white/10">
+                  {dest.main_image ? (
+                    <Image
+                      src={`/images/destinations/${dest.main_image}`}
+                      alt={dest.country || "Destination"}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="h-full w-full bg-white/5" />
+                  )}
+                  </div>
+                  <p className="text-xs text-[#9d9d9d]">
+                    {dest.main_image || "main_image: -"}
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {(dest.images || []).slice(0, 4).map((image) => (
+                    <div key={image} className="space-y-1">
+                      <div className="relative h-[75px] sm:h-[85px] w-full overflow-hidden rounded-md border border-white/10">
+                        <Image
+                          src={`/images/destinations/${image}`}
+                          alt={dest.country || "Destination"}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <p className="text-[10px] text-[#9d9d9d] break-words">
+                        {image}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-3 space-y-2">
+                <div className="relative h-[140px] w-full overflow-hidden rounded-lg border border-white/10">
+                  {dest.activity_image ? (
+                    <Image
+                      src={`/images/destinations/${dest.activity_image}`}
+                      alt="activity"
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="h-full w-full bg-white/5" />
+                  )}
+                </div>
+                <p className="text-xs text-[#9d9d9d]">
+                  {dest.activity_image || "activity_image: -"}
+                </p>
               </div>
 
               <p className="text-sm text-[#c2c2c2] mt-4">{dest.description}</p>
@@ -119,7 +153,7 @@ export default function TestDestinationsPage() {
                   </div>
                   <div>
                     <span className="text-[#9d9d9d]">Images:</span>{" "}
-                    {Array.isArray(dest.images) ? dest.images.join(", ") : ""}
+                    {Array.isArray(dest.images) ? dest.images.length : 0}
                   </div>
                 </div>
               </div>
@@ -137,11 +171,7 @@ export default function TestDestinationsPage() {
                   <div className="text-[#9d9d9d] text-xs uppercase tracking-wide">
                     Type de vol
                   </div>
-                  <div>
-                    {Array.isArray(dest.flight_type)
-                      ? dest.flight_type.join(", ")
-                      : ""}
-                  </div>
+                  <div>{dest.flight_type || ""}</div>
                 </div>
               </div>
 

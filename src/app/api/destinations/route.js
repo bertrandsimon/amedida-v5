@@ -11,6 +11,7 @@ export async function GET(request) {
     const seasonSlug = searchParams.get("season");
     const favoriteParam = searchParams.get("favorite");
     const tagParam = searchParams.get("tag");
+    const allParam = searchParams.get("all");
     const limitParam = searchParams.get("limit");
     const limit = Number.parseInt(limitParam || "3", 10);
 
@@ -30,13 +31,18 @@ export async function GET(request) {
 
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_DB || "amedida");
-    const destinations = await db
-      .collection("destinations")
-      .aggregate([
-        { $match: filter },
-        { $sample: { size: Number.isNaN(limit) ? 3 : limit } },
-      ])
-      .toArray();
+    let destinations;
+    if (allParam === "true") {
+      destinations = await db.collection("destinations").find(filter).toArray();
+    } else {
+      destinations = await db
+        .collection("destinations")
+        .aggregate([
+          { $match: filter },
+          { $sample: { size: Number.isNaN(limit) ? 3 : limit } },
+        ])
+        .toArray();
+    }
 
     const normalized = destinations.map((doc) => ({
       ...doc,

@@ -1,4 +1,5 @@
 import Title from "@/components/Title/Title";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Favorites({
@@ -34,11 +35,16 @@ export default function Favorites({
           const image = destination?.main_image
             ? `/images/destinations/${destination.main_image}`
             : "/images/favorite-1.jpg";
+          const href = destination?._id
+            ? `/destinations/${destination._id}`
+            : null;
 
           return (
-            <div
+            <Link
               key={destination._id || `${country}-${tag}`}
               className="col-span-1 h-[300px] sm:h-[380px] lg:h-[440px] perspective-1000 group"
+              href={href || "#"}
+              aria-disabled={!href}
             >
               <div className="relative w-full h-full cursor-pointer preserve-3d transition-transform duration-700 ease-in-out group-hover:rotate-y-180">
                 {/* Front */}
@@ -70,7 +76,7 @@ export default function Favorites({
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>

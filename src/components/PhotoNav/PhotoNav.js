@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Title from "@/components/Title/Title";
 import { useTheme } from "@/contexts/ThemeContext";
 
@@ -57,6 +58,53 @@ export default function PhotoNav({
 
   const getItem = (index) => photoItems[index];
 
+  const renderCard = (index, className, fallbackColor) => {
+    const item = getItem(index);
+    const Wrapper = item?.id ? Link : "div";
+    const wrapperProps = item?.id ? { href: `/destinations/${item.id}` } : {};
+
+    return (
+      <Wrapper
+        {...wrapperProps}
+        className={`group relative rounded-[12px] overflow-hidden ${className} cursor-pointer`}
+        aria-disabled={!item?.id}
+      >
+        {isLoading ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/5">
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+          </div>
+        ) : (
+          <>
+            <div
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 ease-out group-hover:scale-[1.2]"
+              style={{
+                backgroundImage: item?.image
+                  ? `url(${item.image})`
+                  : fallbackColor,
+              }}
+            />
+            <div className="absolute inset-0 bg-black/15"></div>
+          </>
+        )}
+        <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 flex items-start justify-start">
+          <div className="flex flex-col">
+            {tag && (
+              <span className="mb-1 inline-flex w-fit rounded-full bg-white/90 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-black">
+                {tag}
+              </span>
+            )}
+            <p className={`${textColor} text-xs sm:text-sm font-medium`}>
+              {item?.title}
+            </p>
+            <p className={`${textColor} text-base sm:text-xl font-bold`}>
+              {item?.subtitle}
+            </p>
+          </div>
+        </div>
+      </Wrapper>
+    );
+  };
+
   return (
     <>
       <Title title1={title} title2={subtitle} description={description} />
@@ -64,145 +112,29 @@ export default function PhotoNav({
         <div className="flex flex-col gap-3 sm:gap-4 w-full max-w-[1200px] px-4">
           {/* Top row */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
-            <div className="group relative rounded-[12px] overflow-hidden flex-1 h-[200px] sm:h-[250px] lg:h-[317px] cursor-pointer">
-              {isLoading ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/5">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                </div>
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 ease-out group-hover:scale-[1.2]"
-                    style={{
-                      backgroundImage: getItem(0)?.image
-                        ? `url(${getItem(0).image})`
-                        : "rgba(0, 0, 0, 0.05)",
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/15"></div>
-                </>
-              )}
-              <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 flex items-start justify-start">
-                <div className="flex flex-col">
-                  {tag && (
-                    <span className="mb-1 inline-flex w-fit rounded-full bg-white/90 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-black">
-                      {tag}
-                    </span>
-                  )}
-                  <p className={`${textColor} text-xs sm:text-sm font-medium`}>
-                    {getItem(0)?.title}
-                  </p>
-                  <p className={`${textColor} text-base sm:text-xl font-bold`}>
-                    {getItem(0)?.subtitle}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="group relative rounded-[12px] overflow-hidden flex-[0.63] sm:flex-[0.63] h-[200px] sm:h-[250px] lg:h-[317px] cursor-pointer">
-              {isLoading ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/5">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                </div>
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 ease-out group-hover:scale-[1.2]"
-                    style={{
-                      backgroundImage: getItem(1)?.image
-                        ? `url(${getItem(1).image})`
-                        : "rgba(0, 0, 0, 0.05)",
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/15"></div>
-                </>
-              )}
-              <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 flex items-start justify-start">
-                <div className="flex flex-col">
-                  {tag && (
-                    <span className="mb-1 inline-flex w-fit rounded-full bg-white/90 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-black">
-                      {tag}
-                    </span>
-                  )}
-                  <p className={`${textColor} text-xs sm:text-sm font-medium`}>
-                    {getItem(1)?.title}
-                  </p>
-                  <p className={`${textColor} text-base sm:text-xl font-bold`}>
-                    {getItem(1)?.subtitle}
-                  </p>
-                </div>
-              </div>
-            </div>
+            {renderCard(
+              0,
+              "flex-1 h-[200px] sm:h-[250px] lg:h-[317px]",
+              "rgba(0, 0, 0, 0.05)",
+            )}
+            {renderCard(
+              1,
+              "flex-[0.63] sm:flex-[0.63] h-[200px] sm:h-[250px] lg:h-[317px]",
+              "rgba(0, 0, 0, 0.05)",
+            )}
           </div>
           {/* Bottom row */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
-            <div className="group relative rounded-[12px] overflow-hidden flex-[0.63] sm:flex-[0.63] h-[200px] sm:h-[250px] lg:h-[317px] cursor-pointer">
-              {isLoading ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/5">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                </div>
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 ease-out group-hover:scale-[1.2]"
-                    style={{
-                      backgroundImage: getItem(2)?.image
-                        ? `url(${getItem(2).image})`
-                        : "rgba(0, 0, 0, 0.08)",
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/15"></div>
-                </>
-              )}
-              <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 flex items-start justify-start">
-                <div className="flex flex-col">
-                  {tag && (
-                    <span className="mb-1 inline-flex w-fit rounded-full bg-white/90 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-black">
-                      {tag}
-                    </span>
-                  )}
-                  <p className={`${textColor} text-xs sm:text-sm font-medium`}>
-                    {getItem(2)?.title}
-                  </p>
-                  <p className={`${textColor} text-base sm:text-xl font-bold`}>
-                    {getItem(2)?.subtitle}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="group relative rounded-[12px] overflow-hidden flex-1 h-[200px] sm:h-[250px] lg:h-[317px] cursor-pointer">
-              {isLoading ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/5">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                </div>
-              ) : (
-                <>
-                  <div
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 ease-out group-hover:scale-[1.2]"
-                    style={{
-                      backgroundImage: getItem(3)?.image
-                        ? `url(${getItem(3).image})`
-                        : "rgba(0, 0, 0, 0.05)",
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/15"></div>
-                </>
-              )}
-              <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 flex items-start justify-start">
-                <div className="flex flex-col">
-                  {tag && (
-                    <span className="mb-1 inline-flex w-fit rounded-full bg-white/90 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-black">
-                      {tag}
-                    </span>
-                  )}
-                  <p className={`${textColor} text-xs sm:text-sm font-medium`}>
-                    {getItem(3)?.title}
-                  </p>
-                  <p className={`${textColor} text-base sm:text-xl font-bold`}>
-                    {getItem(3)?.subtitle}
-                  </p>
-                </div>
-              </div>
-            </div>
+            {renderCard(
+              2,
+              "flex-[0.63] sm:flex-[0.63] h-[200px] sm:h-[250px] lg:h-[317px]",
+              "rgba(0, 0, 0, 0.08)",
+            )}
+            {renderCard(
+              3,
+              "flex-1 h-[200px] sm:h-[250px] lg:h-[317px]",
+              "rgba(0, 0, 0, 0.05)",
+            )}
           </div>
         </div>
       </div>

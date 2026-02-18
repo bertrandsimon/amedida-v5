@@ -2,15 +2,17 @@
 
 import { Menu, Moon, Sun, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import Navigation from "./Navigation";
 import TopToolbar from "./TopToolbar";
 
-export default function Header() {
+export default function Header({ forceSticky = false }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const effectiveSticky = forceSticky || isSticky;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,16 +28,18 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const containerClass = isSticky
+  const containerClass = effectiveSticky
     ? "container max-w-[1260px] px-2 sm:px-4"
     : "container max-w-[1200px] px-2 sm:px-4";
 
   const renderHeaderContent = () => (
     <div className={containerClass}>
       <div className="flex items-center justify-between py-2 sm:py-4">
-        <div
+        <Link
+          href="/"
           className="h-[50px] w-[110px] sm:h-[69px] sm:w-[148px] relative flex-shrink-0"
           data-name="Amedia logo"
+          aria-label="Aller à l'accueil"
         >
           <div
             className="absolute inset-0 pointer-events-none"
@@ -43,7 +47,7 @@ export default function Header() {
           >
             <Image
               src={
-                isSticky
+                effectiveSticky
                   ? theme === "light"
                     ? "/images/amedida-logo-noir.png"
                     : "/images/amedida-logo-blanc.png"
@@ -55,11 +59,11 @@ export default function Header() {
               height={69}
             />
           </div>
-        </div>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden lg:block">
-          <Navigation isSticky={isSticky} theme={theme} />
+          <Navigation isSticky={effectiveSticky} theme={theme} />
         </div>
 
         {/* Desktop Actions */}
@@ -78,7 +82,7 @@ export default function Header() {
               type="button"
               onClick={toggleTheme}
               className={`cursor-pointer ${
-                isSticky ? "text-black" : "text-white"
+                effectiveSticky ? "text-black" : "text-white"
               } hover:text-[#df986c] transition-colors p-2`}
               aria-label="Switch to dark mode"
             >
@@ -112,7 +116,7 @@ export default function Header() {
       {isMobileMenuOpen && (
         <div className="md:hidden mt-4 pb-4 border-t border-white/20">
           <div className="pt-4 space-y-4">
-            <Navigation isSticky={isSticky} theme={theme} />
+            <Navigation isSticky={effectiveSticky} theme={theme} />
             <div className="flex items-center justify-between pt-4">
               <div className="flex items-center gap-3">
                 {theme === "dark" ? (
@@ -129,7 +133,7 @@ export default function Header() {
                     type="button"
                     onClick={toggleTheme}
                     className={`cursor-pointer ${
-                      isSticky ? "text-black" : "text-white"
+                      effectiveSticky ? "text-black" : "text-white"
                     } hover:text-[#df986c] transition-colors p-2`}
                     aria-label="Switch to dark mode"
                   >
@@ -152,12 +156,12 @@ export default function Header() {
 
   return (
     <>
-      {!isSticky && (
+      {!effectiveSticky && (
         <header className="absolute top-0 left-0 right-0 z-50 pt-2 sm:pt-4 px-2 sm:px-4">
           {renderHeaderContent()}
         </header>
       )}
-      {isSticky && (
+      {effectiveSticky && (
         <>
           <div
             className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[1260px] px-2 sm:px-4 pt-[40px] pb-4 sm:pb-6 ${

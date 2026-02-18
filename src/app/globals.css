@@ -65,11 +65,25 @@ body {
 /* Dark mode (default) */
 [data-theme="dark"] {
   --background: #181818;
+  --dest-text: #ffffff;
+  --dest-muted: rgba(255, 255, 255, 0.8);
+  --dest-soft: rgba(255, 255, 255, 0.6);
+  --dest-border: rgba(255, 255, 255, 0.1);
+  --dest-panel: rgba(255, 255, 255, 0.05);
+  --dest-chip: rgba(255, 255, 255, 0.1);
+  --dest-chip-border: rgba(255, 255, 255, 0.2);
 }
 
 /* Light mode */
 [data-theme="light"] {
   --background: #EFEEF1;
+  --dest-text: #111111;
+  --dest-muted: rgba(17, 17, 17, 0.7);
+  --dest-soft: rgba(17, 17, 17, 0.55);
+  --dest-border: rgba(0, 0, 0, 0.08);
+  --dest-panel: rgba(0, 0, 0, 0.04);
+  --dest-chip: rgba(0, 0, 0, 0.06);
+  --dest-chip-border: rgba(0, 0, 0, 0.12);
 }
 
 /* 3D Flip Card Animation */

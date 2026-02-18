@@ -15,9 +15,11 @@ export default function TestimonialCarousel() {
   const currentTestimonial = testimonials[currentIndex];
   const { theme } = useTheme();
   const textColor = theme === "light" ? "text-black" : "text-white";
-  const secondaryTextColor = theme === "light" ? "text-gray-600" : "text-[#9ea0a9]";
+  const secondaryTextColor =
+    theme === "light" ? "text-gray-600" : "text-[#9ea0a9]";
   const arrowColor = theme === "light" ? "text-gray-400" : "text-white/50";
-  const arrowHoverColor = theme === "light" ? "hover:text-gray-600" : "hover:text-white";
+  const arrowHoverColor =
+    theme === "light" ? "hover:text-gray-600" : "hover:text-white";
 
   const nextTestimonial = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -46,10 +48,14 @@ export default function TestimonialCarousel() {
                     />
                   </div>
                   <div>
-                    <p className={`${textColor} font-semibold font-poppins text-sm sm:text-base`}>
+                    <p
+                      className={`${textColor} font-semibold font-poppins text-sm sm:text-base`}
+                    >
                       {currentTestimonial.name}
                     </p>
-                    <p className={`${secondaryTextColor} text-xs sm:text-sm font-poppins`}>
+                    <p
+                      className={`${secondaryTextColor} text-xs sm:text-sm font-poppins`}
+                    >
                       {currentTestimonial.role}
                     </p>
                   </div>
@@ -72,7 +78,9 @@ export default function TestimonialCarousel() {
                 </div>
               </div>
               <div className="flex-1 flex items-start sm:items-center">
-                <p className={`${textColor} text-sm sm:text-base lg:text-lg font-poppins italic leading-relaxed`}>
+                <p
+                  className={`${textColor} text-sm sm:text-base lg:text-lg font-poppins italic leading-relaxed`}
+                >
                   "{currentTestimonial.text}"
                 </p>
               </div>

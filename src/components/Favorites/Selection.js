@@ -1,4 +1,5 @@
 import Title from "@/components/Title/Title";
+import Link from "next/link";
 
 const flightTypeLabels = {
   court_courrier: "Court courrier",
@@ -17,6 +18,7 @@ export default function Selection({
   destinations = [],
   flightType,
   season,
+  animate = false,
 }) {
   if (!destinations.length) {
     return null;
@@ -30,7 +32,7 @@ export default function Selection({
     .join(" | ");
 
   return (
-    <>
+    <div>
       <Title
         title1="Notre sélection"
         title2="pour vous"
@@ -44,17 +46,29 @@ export default function Selection({
         </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {destinations.map((destination) => {
+        {destinations.map((destination, index) => {
           const tag = destination?.tags?.[0] || "Sélection";
           const country = destination?.country || "Destination";
           const image = destination?.main_image
             ? `/images/destinations/${destination.main_image}`
             : "/images/favorite-1.jpg";
+          const href = destination?._id
+            ? `/destinations/${destination._id}`
+            : null;
 
           return (
-            <div
+            <Link
               key={destination._id || `${country}-${tag}`}
-              className="col-span-1 h-[300px] sm:h-[380px] lg:h-[440px] perspective-1000 group"
+              className={`col-span-1 h-[300px] sm:h-[380px] lg:h-[440px] perspective-1000 group ${
+                animate
+                  ? "animate__animated animate__fadeInUp"
+                  : "opacity-0"
+              }`}
+              style={
+                animate ? { animationDelay: `${index * 0.4}s` } : undefined
+              }
+              href={href || "#"}
+              aria-disabled={!href}
             >
               <div className="relative w-full h-full cursor-pointer preserve-3d transition-transform duration-700 ease-in-out group-hover:rotate-y-180">
                 {/* Front */}
@@ -82,10 +96,10 @@ export default function Selection({
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>
-    </>
+    </div>
   );
 }
