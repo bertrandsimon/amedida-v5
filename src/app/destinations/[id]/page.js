@@ -1,20 +1,37 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ObjectId } from "mongodb";
-import DestinationGallery from "@/components/Destinations/DestinationGallery";
+import DestinationImageStrip from "@/components/Destinations/DestinationImageStrip";
 import Header from "@/components/Header/Header";
 import SiteShell from "@/components/Layout/SiteShell";
 import clientPromise from "@/lib/mongodb";
 
-const testimonials = [
-  "Nous avons fait appel à Amedida pour organiser notre voyage de noces en Afrique du Sud, et tout était parfait ! Lodges magnifiques, safaris inoubliables, et un suivi irréprochable. Merci pour cette expérience magique.",
-  "Notre séjour au Japon était incroyablement bien pensé. Les hébergements étaient charmants et idéalement situés. On sent un vrai travail sur-mesure derrière chaque étape du voyage.",
-  "Une organisation fluide, des conseils avisés et un accompagnement rassurant du début à la fin. Nous avons vécu un voyage authentique au Mexique, loin des circuits touristiques classiques.",
-  "Un voyage en famille au Costa Rica parfaitement orchestré. Les enfants ont adoré les activités nature et nous avons pu profiter sereinement grâce à une logistique impeccable.",
-  "L’équipe Amedida a su comprendre nos attentes et créer un itinéraire sur mesure en Indonésie. Chaque étape était une découverte incroyable.",
-  "Une lune de miel à Bali absolument magique. Les petites attentions et les choix d’hébergements ont fait toute la différence.",
-  "Un city break à Porto parfaitement organisé, avec des recommandations locales qui ont rendu le séjour unique.",
-];
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  try {
+    const client = await clientPromise;
+    const db = client.db(process.env.MONGODB_DB || "amedida");
+    const query = ObjectId.isValid(id)
+      ? { $or: [{ _id: new ObjectId(id) }, { _id: id }] }
+      : { _id: id };
+    const destination = await db.collection("destinations").findOne(query);
+    if (!destination) {
+      return {
+        title: "Destination | AMEDIDA",
+        description: "Découvrez les destinations AMEDIDA.",
+      };
+    }
+    return {
+      title: `${destination.country} | AMEDIDA`,
+      description: destination.description || "Découvrez cette destination.",
+    };
+  } catch {
+    return {
+      title: "Destination | AMEDIDA",
+      description: "Découvrez les destinations AMEDIDA.",
+    };
+  }
+}
 
 export default async function DestinationPage({ params }) {
   const { id } = await params;
@@ -45,10 +62,20 @@ export default async function DestinationPage({ params }) {
     ? destination.images.map((image) => `/images/destinations/${image}`)
     : [];
 
+  const formatDuration = (value) => {
+    if (!value || typeof value !== "string") {
+      return "";
+    }
+    return value.replace(/h/i, " h ").replace(/\s+/g, " ").trim();
+  };
+  const durationLabel = destination.duration
+    ? `${formatDuration(destination.duration)} de vol`
+    : "";
+
   return (
     <SiteShell showTopToolbar={false}>
       <div className="destination-page mx-auto max-w-[1200px] px-5 py-6 sm:py-10 text-[color:var(--dest-text)]">
-        <section className="relative w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] rounded-[10px] overflow-hidden">
+        <section className="relative w-full min-h-[520px] sm:min-h-[640px] lg:min-h-[740px] rounded-[10px] overflow-hidden pb-24 sm:pb-28">
           <Header forceSticky />
           <div className="absolute inset-0 z-0 rounded-[10px] overflow-hidden">
             {mainImage ? (
@@ -63,24 +90,25 @@ export default async function DestinationPage({ params }) {
               <div className="h-full w-full bg-white/5" />
             )}
           </div>
-          <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 z-10">
+          <div className="absolute bottom-24 left-4 sm:bottom-28 sm:left-6 z-10">
             <p className="text-xs sm:text-sm text-[color:var(--dest-muted)]">
               {destination.zone}
             </p>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
               {destination.country}
             </h1>
-            <p className="text-sm sm:text-base text-[color:var(--dest-muted)] mt-1">
-              {destination.duration} • {destination.transport_type}
-            </p>
+            {durationLabel && (
+              <p className="text-sm sm:text-base text-[color:var(--dest-muted)] mt-1">
+                {durationLabel}
+              </p>
+            )}
           </div>
-        </section>
 
-        <section className="mt-6 sm:mt-8">
-          <h2 className="text-lg sm:text-xl font-semibold mb-3">
-            Autres images
-          </h2>
-          <DestinationGallery images={images} />
+          {images.length > 0 && (
+            <div className="absolute left-0 right-0 bottom-4 sm:bottom-6 z-20 px-4 sm:px-6">
+              <DestinationImageStrip images={images} />
+            </div>
+          )}
         </section>
 
         <section className="mt-6 sm:mt-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -91,30 +119,6 @@ export default async function DestinationPage({ params }) {
             <p className="text-sm sm:text-base text-[color:var(--dest-muted)] max-w-[900px]">
               {destination.description}
             </p>
-            {Array.isArray(destination.activities) &&
-              destination.activities.length > 0 && (
-                <div className="mt-5">
-                  <h3 className="text-sm sm:text-base font-semibold mb-2">
-                    Activités proposées
-                  </h3>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-[color:var(--dest-muted)]">
-                    {destination.activities.map((activity) => {
-                      const label =
-                        typeof activity === "string" && activity.length > 0
-                          ? activity.charAt(0).toUpperCase() + activity.slice(1)
-                          : activity;
-                      return (
-                        <li
-                          key={activity}
-                          className="rounded-lg border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] px-3 py-2"
-                        >
-                          {label}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              )}
           </div>
           <div className="rounded-2xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-5 sm:p-6">
             <h2 className="text-lg sm:text-xl font-semibold mb-3">
@@ -244,23 +248,16 @@ export default async function DestinationPage({ params }) {
           </section>
         )}
 
-        <section className="mt-6 sm:mt-8 rounded-2xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-5 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4">
-            Témoignages
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {testimonials.map((text) => (
-              <div
-                key={text}
-                className="rounded-xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-4"
-              >
-                <p className="text-sm sm:text-base text-[color:var(--dest-muted)]">
-                  “{text}”
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
+        {destination.testimonial && (
+          <section className="mt-6 sm:mt-8 rounded-2xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-5 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold mb-2">
+              Témoignage
+            </h2>
+            <p className="text-sm sm:text-base text-[color:var(--dest-muted)]">
+              “{destination.testimonial}”
+            </p>
+          </section>
+        )}
       </div>
     </SiteShell>
   );

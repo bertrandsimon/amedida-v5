@@ -64,7 +64,28 @@ export default function SearchForm({ onSelection }) {
 
         {/* Faites moi rêver */}
         <div className="relative group">
-          <button className="flex items-center gap-2 sm:gap-3 border-b sm:border-b-0 sm:border-r border-white/80 pb-2 sm:pb-0 pr-0 sm:pr-3 lg:pr-4 pl-2 cursor-pointer">
+          <button
+            className="flex items-center gap-2 sm:gap-3 border-b sm:border-b-0 sm:border-r border-white/80 pb-2 sm:pb-0 pr-0 sm:pr-3 lg:pr-4 pl-2 cursor-pointer"
+            onClick={() => {
+              if (!onSelection) {
+                return;
+              }
+              fetch("/api/destinations?limit=3")
+                .then((res) => (res.ok ? res.json() : []))
+                .then((data) => {
+                  onSelection(Array.isArray(data) ? data : [], {
+                    flightType: "",
+                    season: "",
+                  });
+                })
+                .catch(() => {
+                  onSelection([], {
+                    flightType: "",
+                    season: "",
+                  });
+                });
+            }}
+          >
             <Wand2 className="w-4 h-4 sm:w-5 sm:h-5 lg:w-[20px] lg:h-[20px] text-white flex-shrink-0" />
             <span className="text-white text-sm sm:text-base font-poppins">
               Faites moi rêver

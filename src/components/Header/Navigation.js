@@ -1,9 +1,10 @@
+import Link from "next/link";
+
 export default function Navigation({ isSticky = false, theme = "dark" }) {
   const navItems = [
-    { label: "Présentation", href: "#presentation" },
-    { label: "Evènements", href: "#evenements" },
-    { label: "Destinations", href: "#destinations" },
-    { label: "Créer votre voyage", href: "#creer-voyage" },
+    { label: "Accueil", href: "/" },
+    { label: "Présentation", href: "/presentation" },
+    { label: "Destinations", href: "/destinations" },
   ];
 
   return (
@@ -11,7 +12,7 @@ export default function Navigation({ isSticky = false, theme = "dark" }) {
       {isSticky ? (
         <div className="flex items-center gap-3 sm:gap-4 lg:gap-8 flex-wrap justify-center">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.label}
               href={item.href}
               className={`text-xs sm:text-sm font-poppins hover:text-[#df986c] transition-colors whitespace-nowrap ${
@@ -19,7 +20,7 @@ export default function Navigation({ isSticky = false, theme = "dark" }) {
               }`}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </div>
       ) : (
@@ -34,13 +35,13 @@ export default function Navigation({ isSticky = false, theme = "dark" }) {
           {/* Navigation items */}
           <div className="relative flex items-center gap-3 sm:gap-4 lg:gap-8 z-10 flex-wrap justify-center">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.label}
                 href={item.href}
                 className="text-xs sm:text-sm text-white font-poppins hover:text-[#df986c] transition-colors whitespace-nowrap"
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

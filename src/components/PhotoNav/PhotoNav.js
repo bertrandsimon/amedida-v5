@@ -8,7 +8,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 export default function PhotoNav({
   title = "Le plus court chemin",
   subtitle = "vers le bout du monde",
-  description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  description = "Des expériences uniques pensées pour inspirer vos équipes, avec des destinations soigneusement sélectionnées.",
   tag,
 }) {
   const { theme } = useTheme();

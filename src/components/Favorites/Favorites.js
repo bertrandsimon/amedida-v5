@@ -5,9 +5,20 @@ import { useEffect, useState } from "react";
 export default function Favorites({
   title = "nos destinations",
   subtitle = "coups de coeur",
-  description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  description = "Découvrez nos destinations coup de coeur sélectionnées pour inspirer vos prochains voyages.",
 }) {
   const [favorites, setFavorites] = useState([]);
+
+  const getDescriptionSnippet = (text) => {
+    if (!text || typeof text !== "string") {
+      return "";
+    }
+    const trimmed = text.trim();
+    if (trimmed.length <= 120) {
+      return `${trimmed}…`;
+    }
+    return `${trimmed.slice(0, 120)}…`;
+  };
 
   useEffect(() => {
     fetch("/api/destinations?favorite=true&limit=3")
@@ -31,7 +42,9 @@ export default function Favorites({
         {favorites.map((destination) => {
           const tag = destination?.tags?.[0] || "Sélection";
           const country = destination?.country || "Destination";
-          const activity = destination?.activities?.[0] || "Découvrez";
+          const descriptionSnippet = getDescriptionSnippet(
+            destination?.description,
+          );
           const image = destination?.main_image
             ? `/images/destinations/${destination.main_image}`
             : "/images/favorite-1.jpg";
@@ -67,12 +80,12 @@ export default function Favorites({
                 {/* Back */}
                 <div className="absolute inset-0 backface-hidden rotate-y-180 rounded-xl bg-[#DF986C] flex items-center justify-center">
                   <div className="flex flex-col items-center justify-center px-4 text-center">
-                    <p className="text-black text-sm font-medium">
-                      Une idée d'activité ?
-                    </p>
-                    <p className="text-black text-xl font-bold max-w-[280px]">
-                      {activity}
-                    </p>
+                    <p className="text-black text-sm font-semibold">{tag}</p>
+                    {descriptionSnippet && (
+                      <p className="text-black text-sm font-medium max-w-[280px] mt-2">
+                        {descriptionSnippet}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

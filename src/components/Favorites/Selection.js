@@ -31,6 +31,17 @@ export default function Selection({
     .filter(Boolean)
     .join(" | ");
 
+  const getDescriptionSnippet = (text) => {
+    if (!text || typeof text !== "string") {
+      return "";
+    }
+    const trimmed = text.trim();
+    if (trimmed.length <= 120) {
+      return `${trimmed}…`;
+    }
+    return `${trimmed.slice(0, 120)}…`;
+  };
+
   return (
     <div>
       <Title
@@ -55,6 +66,9 @@ export default function Selection({
           const href = destination?._id
             ? `/destinations/${destination._id}`
             : null;
+          const descriptionSnippet = getDescriptionSnippet(
+            destination?.description,
+          );
 
           return (
             <Link
@@ -90,9 +104,13 @@ export default function Selection({
                 </div>
                 {/* Back */}
                 <div className="absolute inset-0 backface-hidden rotate-y-180 rounded-xl bg-[#DF986C] flex items-center justify-center">
-                  <div className="flex flex-col items-center justify-center">
-                    <p className="text-black text-sm font-medium">Découvrez</p>
-                    <p className="text-black text-xl font-bold">{country}</p>
+                  <div className="flex flex-col items-center justify-center px-4 text-center">
+                    <p className="text-black text-sm font-semibold">{tag}</p>
+                    {descriptionSnippet && (
+                      <p className="text-black text-sm font-medium mt-2 max-w-[280px]">
+                        {descriptionSnippet}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

@@ -73,6 +73,8 @@ export default function TopToolbar({ isSticky = false }) {
               </div>
 
               <form
+                action={`https://formsubmit.co/${contactInfo.email}`}
+                method="POST"
                 className="space-y-3"
                 onKeyDown={(event) => {
                   if (event.key === "Escape") {
@@ -80,6 +82,8 @@ export default function TopToolbar({ isSticky = false }) {
                   }
                 }}
               >
+                <input type="hidden" name="_subject" value="Nouveau message" />
+                <input type="hidden" name="_captcha" value="false" />
                 <div className="flex flex-col gap-2">
                   <label
                     htmlFor="contact-name"
@@ -90,6 +94,7 @@ export default function TopToolbar({ isSticky = false }) {
                   <input
                     id="contact-name"
                     type="text"
+                    name="name"
                     placeholder="Votre nom"
                     className={`h-10 rounded-md border ${inputBorder} ${inputBg} px-3 text-sm ${modalText} focus:outline-none focus:border-[#df986c] transition-colors`}
                   />
@@ -104,6 +109,7 @@ export default function TopToolbar({ isSticky = false }) {
                   <input
                     id="contact-email"
                     type="email"
+                    name="email"
                     placeholder="Votre email"
                     className={`h-10 rounded-md border ${inputBorder} ${inputBg} px-3 text-sm ${modalText} focus:outline-none focus:border-[#df986c] transition-colors`}
                   />
@@ -118,6 +124,7 @@ export default function TopToolbar({ isSticky = false }) {
                   <textarea
                     id="contact-message"
                     rows={4}
+                    name="message"
                     placeholder="Votre message"
                     className={`rounded-md border ${inputBorder} ${inputBg} px-3 py-2 text-sm ${modalText} focus:outline-none focus:border-[#df986c] transition-colors`}
                   />
