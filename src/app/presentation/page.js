@@ -1,3 +1,4 @@
+import { Sparkles, Users, Globe2, Target } from "lucide-react";
 import Header from "@/components/Header/Header";
 import SiteShell from "@/components/Layout/SiteShell";
 
@@ -16,7 +17,7 @@ export default function PresentationPage() {
         </section>
 
         <section className="mt-6 sm:mt-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[color:var(--dest-text)]">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[color:var(--dest-text)] mt-20">
             Qui sommes-nous ?
           </h1>
           <p className="mt-4 text-sm sm:text-base leading-relaxed text-[color:var(--dest-muted)]">
@@ -35,21 +36,37 @@ export default function PresentationPage() {
           </p>
         </section>
 
-        <section
-          className="mt-8 sm:mt-10 rounded-2xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-5 sm:p-6"
-        >
+        <section className="mt-8 sm:mt-10">
           <h2 className="text-lg sm:text-xl font-semibold text-[color:var(--dest-text)]">
             Notre Promesse
           </h2>
-          <ul className="mt-4 space-y-2 text-sm sm:text-base text-[color:var(--dest-muted)]">
-            <li>Des destinations coup de coeur et concepts différents</li>
-            <li>Une équipe réactive, créative et rigoureuse</li>
-            <li>Un réseau solide de partenaires en France et à l’international</li>
-            <li>
-              Un seul objectif : faire de chaque événement un levier de performance
-              et de fidélisation
-            </li>
-          </ul>
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="rounded-2xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-4 sm:p-5 text-[color:var(--dest-muted)]">
+              <Sparkles className="h-6 w-6 text-[#df986c]" />
+              <p className="mt-3 text-sm sm:text-base">
+                Des destinations coup de coeur et concepts différents
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-4 sm:p-5 text-[color:var(--dest-muted)]">
+              <Users className="h-6 w-6 text-[#df986c]" />
+              <p className="mt-3 text-sm sm:text-base">
+                Une équipe réactive, créative et rigoureuse
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-4 sm:p-5 text-[color:var(--dest-muted)]">
+              <Globe2 className="h-6 w-6 text-[#df986c]" />
+              <p className="mt-3 text-sm sm:text-base">
+                Un réseau solide de partenaires en France et à l’international
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-4 sm:p-5 text-[color:var(--dest-muted)]">
+              <Target className="h-6 w-6 text-[#df986c]" />
+              <p className="mt-3 text-sm sm:text-base">
+                Un seul objectif : faire de chaque événement un levier de performance
+                et de fidélisation
+              </p>
+            </div>
+          </div>
         </section>
       </div>
     </SiteShell>

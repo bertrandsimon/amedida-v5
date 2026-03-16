@@ -24,6 +24,9 @@ const poppins = Poppins({
 export const metadata = {
   title: "AMEDIDA - Voyages de récompense sur mesure",
   description: "Fabrique de magie événementielle dédiée au tourisme d'affaires",
+  icons: {
+    icon: "/images/cropped-favicon-32x32.png",
+  },
 };
 
 export default function RootLayout({ children }) {

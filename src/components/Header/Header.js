@@ -89,12 +89,14 @@ export default function Header({ forceSticky = false }) {
               <Moon className="w-5 h-5" />
             </button>
           )}
-          <button
-            type="button"
+          <a
+            href="https://calendly.com/paul-dehergne-amedida/"
+            target="_blank"
+            rel="noreferrer"
             className="cursor-pointer bg-black text-white px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-poppins hover:bg-[#df986c] transition-colors"
           >
-            Contact
-          </button>
+            Prendre RDV
+          </a>
         </div>
 
         {/* Mobile Menu Button */}
@@ -141,12 +143,14 @@ export default function Header({ forceSticky = false }) {
                   </button>
                 )}
               </div>
-              <button
-                type="button"
+              <a
+                href="https://calendly.com/paul-dehergne-amedida/"
+                target="_blank"
+                rel="noreferrer"
                 className="cursor-pointer bg-black text-white px-4 py-2 rounded-full text-sm font-poppins hover:bg-[#df986c] transition-colors"
               >
-                Contact
-              </button>
+                Prendre RDV
+              </a>
             </div>
           </div>
         </div>

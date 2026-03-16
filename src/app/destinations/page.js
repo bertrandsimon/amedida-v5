@@ -16,10 +16,10 @@ export default function DestinationsPage() {
           <Header forceSticky />
         </section>
         <div className="mt-6 sm:mt-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[color:var(--dest-text)]">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[color:var(--dest-text)] mt-20">
             Destinations
           </h1>
-          <p className="mt-2 text-sm sm:text-base text-[color:var(--dest-muted)]">
+          <p className="mt-2 text-sm sm:text-base text-[#df986c]">
             Parcourez nos destinations et filtrez selon vos envies.
           </p>
           <DestinationsClient />

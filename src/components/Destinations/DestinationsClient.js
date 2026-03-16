@@ -1,17 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { Heart } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import "@/components/Hero/AnimatedButton.css";
 
 export default function DestinationsClient() {
   const [destinations, setDestinations] = useState([]);
   const [filters, setFilters] = useState({
     zone: "",
-    flightType: "",
     directFlight: "",
-    country: "",
     tag: "",
     favorite: false,
+    country: "",
   });
 
   useEffect(() => {
@@ -23,32 +24,32 @@ export default function DestinationsClient() {
 
   const options = useMemo(() => {
     const zones = new Set();
-    const flightTypes = new Set();
     const tags = new Set();
-    const countries = new Set();
+    const countriesByZone = new Map();
     destinations.forEach((destination) => {
       if (destination.zone) zones.add(destination.zone);
-      if (destination.flight_type) flightTypes.add(destination.flight_type);
-      if (destination.country) countries.add(destination.country);
       if (Array.isArray(destination.tags)) {
         destination.tags.forEach((tag) => {
           tags.add(tag);
         });
       }
+      if (destination.zone && destination.country) {
+        if (!countriesByZone.has(destination.zone)) {
+          countriesByZone.set(destination.zone, new Set());
+        }
+        countriesByZone.get(destination.zone).add(destination.country);
+      }
     });
     return {
       zones: Array.from(zones).sort(),
-      flightTypes: Array.from(flightTypes).sort(),
-      countries: Array.from(countries).sort(),
       tags: Array.from(tags).sort(),
+      countriesByZone,
     };
   }, [destinations]);
 
   const filteredDestinations = useMemo(() => {
     return destinations.filter((destination) => {
       if (filters.zone && destination.zone !== filters.zone) return false;
-      if (filters.flightType && destination.flight_type !== filters.flightType)
-        return false;
       if (filters.country && destination.country !== filters.country) return false;
       if (filters.directFlight !== "") {
         if (filters.directFlight === "true" && !destination.direct_flight)
@@ -62,6 +63,11 @@ export default function DestinationsClient() {
     });
   }, [destinations, filters]);
 
+  const activeTag = filters.tag;
+  const countryOptions = filters.zone
+    ? Array.from(options.countriesByZone.get(filters.zone) || []).sort()
+    : [];
+
   return (
     <div className="mt-6 sm:mt-8">
       <section className="rounded-2xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-4 sm:p-5">
@@ -70,50 +76,39 @@ export default function DestinationsClient() {
             className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
             value={filters.zone}
             onChange={(event) =>
-              setFilters((prev) => ({ ...prev, zone: event.target.value }))
+              setFilters((prev) => ({
+                ...prev,
+                zone: event.target.value,
+                country: "",
+              }))
             }
           >
-            <option value="">Zone</option>
+            <option value="">Tous</option>
             {options.zones.map((zone) => (
               <option key={zone} value={zone}>
                 {zone}
               </option>
             ))}
           </select>
-          <select
-            className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
-            value={filters.flightType}
-            onChange={(event) =>
-              setFilters((prev) => ({
-                ...prev,
-                flightType: event.target.value,
-              }))
-            }
-          >
-            <option value="">Type de vol</option>
-            {options.flightTypes.map((type) => (
-              <option key={type} value={type}>
-                {type.replace("_", " ")}
-              </option>
-            ))}
-          </select>
-          <select
-            className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
-            value={filters.country}
-            onChange={(event) =>
-              setFilters((prev) => ({
-                ...prev,
-                country: event.target.value,
-              }))
-            }
-          >
-            <option value="">Pays</option>
-            {options.countries.map((country) => (
-              <option key={country} value={country}>
-                {country}
-              </option>
-            ))}
-          </select>
+          {filters.zone && (
+            <select
+              className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
+              value={filters.country}
+              onChange={(event) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  country: event.target.value,
+                }))
+              }
+            >
+              <option value="">Tous</option>
+              {countryOptions.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          )}
           <select
             className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
             value={filters.directFlight}
@@ -128,33 +123,44 @@ export default function DestinationsClient() {
             <option value="true">Oui</option>
             <option value="false">Non</option>
           </select>
-          <select
-            className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
-            value={filters.tag}
-            onChange={(event) =>
-              setFilters((prev) => ({ ...prev, tag: event.target.value }))
+          <button
+            type="button"
+            onClick={() =>
+              setFilters((prev) => ({
+                ...prev,
+                favorite: !prev.favorite,
+              }))
             }
+            className="animated-button animated-button--small self-start lg:self-auto"
           >
-            <option value="">Thématique</option>
-            {options.tags.map((tag) => (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
-            ))}
-          </select>
-          <label className="flex items-center gap-2 text-sm text-[color:var(--dest-text)]">
-            <input
-              type="checkbox"
-              checked={filters.favorite}
-              onChange={(event) =>
+            <span className="animated-button-text inline-flex items-center gap-1">
+              {filters.favorite ? "Faîtes moi rêver" : <Heart className="h-4 w-4" />}
+            </span>
+            <span className="animated-button-title text-xs font-poppins">
+              Nos coups de coeur
+            </span>
+          </button>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {options.tags.map((tag) => (
+            <button
+              key={tag}
+              type="button"
+              onClick={() =>
                 setFilters((prev) => ({
                   ...prev,
-                  favorite: event.target.checked,
+                  tag: prev.tag === tag ? "" : tag,
                 }))
               }
-            />
-            Coups de coeur
-          </label>
+              className={`rounded-full border px-3 py-1 text-xs transition-colors cursor-pointer hover:border-[color:var(--dest-text)] hover:text-[color:var(--dest-text)] ${
+                activeTag === tag
+                  ? "border-[#df986c] text-[#df986c]"
+                  : "border-[color:var(--dest-chip-border)] text-[color:var(--dest-muted)]"
+              }`}
+            >
+              {tag}
+            </button>
+          ))}
         </div>
       </section>
 
@@ -169,36 +175,51 @@ export default function DestinationsClient() {
               href={`/destinations/${destination._id}`}
               className="group rounded-2xl border border-[color:var(--dest-border)] overflow-hidden bg-[color:var(--dest-panel)]"
             >
-              <div
-                className="h-[220px] bg-cover bg-center"
-                style={{ backgroundImage: `url('${image}')` }}
-              />
+              <div className="h-[220px] overflow-hidden">
+                <div
+                  className="h-full w-full bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-[1.12]"
+                  style={{ backgroundImage: `url('${image}')` }}
+                />
+              </div>
               <div className="p-4">
                 <div className="flex items-center justify-between">
                   <p className="text-sm text-[color:var(--dest-soft)]">
                     {destination.zone}
                   </p>
                   {destination.favorite && (
-                    <span className="text-xs text-[#df986c]">Coup de coeur</span>
+                    <span className="text-xs text-[#df986c] inline-flex items-center gap-1">
+                      Coup de <Heart className="h-3 w-3" />
+                    </span>
                   )}
                 </div>
                 <h3 className="text-lg font-semibold text-[color:var(--dest-text)]">
                   {destination.country}
                 </h3>
                 <p className="text-xs text-[color:var(--dest-soft)] mt-1">
-                  {destination.flight_type?.replace("_", " ") || ""} ·{" "}
-                  {destination.direct_flight ? "Vol direct" : "Avec escale"}
+                  {destination.flight_type
+                    ? destination.flight_type.charAt(0).toUpperCase() +
+                      destination.flight_type.slice(1).replace("_", " ")
+                    : ""}{" "}
+                  · {destination.direct_flight ? "Vol direct" : "Avec escale"}
                 </p>
                 {Array.isArray(destination.tags) &&
                   destination.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-3">
                       {destination.tags.slice(0, 3).map((tag) => (
-                        <span
+                        <button
                           key={tag}
-                          className="rounded-full border border-[color:var(--dest-chip-border)] bg-[color:var(--dest-chip)] px-3 py-1 text-xs text-[color:var(--dest-muted)]"
+                          type="button"
+                          onClick={(event) => {
+                            event.preventDefault();
+                            setFilters((prev) => ({
+                              ...prev,
+                              tag,
+                            }));
+                          }}
+                          className="rounded-full border border-[color:var(--dest-chip-border)] bg-[color:var(--dest-chip)] px-3 py-1 text-xs text-[color:var(--dest-muted)] hover:border-[#df986c] hover:text-[#df986c] transition-colors"
                         >
                           {tag}
-                        </span>
+                        </button>
                       ))}
                     </div>
                   )}
@@ -207,6 +228,12 @@ export default function DestinationsClient() {
           );
         })}
       </section>
+
+      {!filteredDestinations.length && (
+        <p className="mt-6 text-sm text-[color:var(--dest-muted)]">
+          Aucun résultat ne correspond à vos filtres.
+        </p>
+      )}
     </div>
   );
 }
