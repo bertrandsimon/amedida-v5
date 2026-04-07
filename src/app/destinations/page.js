@@ -6,6 +6,21 @@ export const metadata = {
   title: "Destinations | AMEDIDA",
   description:
     "Explorez toutes les destinations AMEDIDA avec filtres par zone, vols et thématiques.",
+  alternates: {
+    canonical: "/destinations",
+  },
+  openGraph: {
+    title: "Destinations | AMEDIDA",
+    description:
+      "Explorez toutes les destinations AMEDIDA avec filtres par zone, vols et thématiques.",
+    url: "/destinations",
+    type: "website",
+  },
+  twitter: {
+    title: "Destinations | AMEDIDA",
+    description:
+      "Explorez toutes les destinations AMEDIDA avec filtres par zone, vols et thématiques.",
+  },
 };
 
 export default function DestinationsPage() {

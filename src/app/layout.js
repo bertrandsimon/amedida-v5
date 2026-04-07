@@ -21,11 +21,26 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
 export const metadata = {
+  metadataBase: new URL(baseUrl),
   title: "AMEDIDA - Voyages de récompense sur mesure",
   description: "Fabrique de magie événementielle dédiée au tourisme d'affaires",
   icons: {
     icon: "/images/cropped-favicon-32x32.png",
+  },
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    siteName: "AMEDIDA",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

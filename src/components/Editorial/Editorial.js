@@ -12,9 +12,7 @@ export default function Editorial() {
         <p className={`${textColor} text-sm sm:text-base lg:text-lg`}>
           Qui sommes-nous ?
         </p>
-        <p
-          className={`${textColor} text-sm sm:text-base lg:text-lg mt-2 leading-relaxed`}
-        >
+        <p className={`${textColor} text-sm mt-2 leading-relaxed`}>
           Amedida, un nom qui évoque le « sur-mesure » en portugais, est notre
           signature. Nous sommes une agence événementielle dédiée au tourisme
           d'affaires, prête à servir les entreprises qui veulent faire de chaque
@@ -27,9 +25,7 @@ export default function Editorial() {
         <p className={`${textColor} text-sm sm:text-base lg:text-lg`}>
           Notre Mission
         </p>
-        <p
-          className={`${textColor} text-sm sm:text-base lg:text-lg mt-2 leading-relaxed`}
-        >
+        <p className={`${textColor} text-sm mt-2 leading-relaxed`}>
           Créer des événements d'entreprise qui allient performance, cohésion et
           inspiration. Que ce soit pour un séminaire, un voyage incentive, un
           team-building ou un lancement de produit, nous concevons des formats

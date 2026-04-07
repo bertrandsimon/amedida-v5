@@ -6,6 +6,21 @@ export const metadata = {
   title: "Présentation | AMEDIDA",
   description:
     "Découvrez AMEDIDA, agence événementielle dédiée au tourisme d'affaires et aux expériences sur-mesure.",
+  alternates: {
+    canonical: "/presentation",
+  },
+  openGraph: {
+    title: "Présentation | AMEDIDA",
+    description:
+      "Découvrez AMEDIDA, agence événementielle dédiée au tourisme d'affaires et aux expériences sur-mesure.",
+    url: "/presentation",
+    type: "website",
+  },
+  twitter: {
+    title: "Présentation | AMEDIDA",
+    description:
+      "Découvrez AMEDIDA, agence événementielle dédiée au tourisme d'affaires et aux expériences sur-mesure.",
+  },
 };
 
 export default function PresentationPage() {

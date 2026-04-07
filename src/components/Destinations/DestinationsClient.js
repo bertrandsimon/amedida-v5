@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Heart } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import "@/components/Hero/AnimatedButton.css";
 
 export default function DestinationsClient() {
   const [destinations, setDestinations] = useState([]);
+  const searchParams = useSearchParams();
   const [filters, setFilters] = useState({
     zone: "",
     directFlight: "",
@@ -21,6 +23,11 @@ export default function DestinationsClient() {
       .then((data) => setDestinations(Array.isArray(data) ? data : []))
       .catch(() => setDestinations([]));
   }, []);
+
+  useEffect(() => {
+    const tagParam = searchParams.get("tag") || "";
+    setFilters((prev) => (prev.tag === tagParam ? prev : { ...prev, tag: tagParam }));
+  }, [searchParams]);
 
   const options = useMemo(() => {
     const zones = new Set();

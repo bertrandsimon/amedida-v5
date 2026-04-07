@@ -1,13 +1,14 @@
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ObjectId } from "mongodb";
-import DestinationImageStrip from "@/components/Destinations/DestinationImageStrip";
-import Header from "@/components/Header/Header";
+import DestinationHero from "@/components/Destinations/DestinationHero";
 import SiteShell from "@/components/Layout/SiteShell";
 import clientPromise from "@/lib/mongodb";
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
+  const canonical = `/destinations/${id}`;
   try {
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_DB || "amedida");
@@ -19,16 +20,64 @@ export async function generateMetadata({ params }) {
       return {
         title: "Destination | AMEDIDA",
         description: "Découvrez les destinations AMEDIDA.",
+        alternates: {
+          canonical,
+        },
+        openGraph: {
+          title: "Destination | AMEDIDA",
+          description: "Découvrez les destinations AMEDIDA.",
+          url: canonical,
+          type: "article",
+        },
+        twitter: {
+          title: "Destination | AMEDIDA",
+          description: "Découvrez les destinations AMEDIDA.",
+        },
       };
     }
+    const title = `${destination.country} | AMEDIDA`;
+    const description =
+      destination.description || "Découvrez cette destination.";
+    const image =
+      destination.main_image
+        ? `/images/destinations/${destination.main_image}`
+        : null;
     return {
-      title: `${destination.country} | AMEDIDA`,
-      description: destination.description || "Découvrez cette destination.",
+      title,
+      description,
+      alternates: {
+        canonical,
+      },
+      openGraph: {
+        title,
+        description,
+        url: canonical,
+        type: "article",
+        images: image ? [{ url: image }] : undefined,
+      },
+      twitter: {
+        title,
+        description,
+        images: image ? [image] : undefined,
+      },
     };
   } catch {
     return {
       title: "Destination | AMEDIDA",
       description: "Découvrez les destinations AMEDIDA.",
+      alternates: {
+        canonical,
+      },
+      openGraph: {
+        title: "Destination | AMEDIDA",
+        description: "Découvrez les destinations AMEDIDA.",
+        url: canonical,
+        type: "article",
+      },
+      twitter: {
+        title: "Destination | AMEDIDA",
+        description: "Découvrez les destinations AMEDIDA.",
+      },
     };
   }
 }
@@ -75,41 +124,12 @@ export default async function DestinationPage({ params }) {
   return (
     <SiteShell showTopToolbar={false}>
       <div className="destination-page mx-auto max-w-[1200px] px-5 py-6 sm:py-10 text-[color:var(--dest-text)]">
-        <section className="relative w-full min-h-[520px] sm:min-h-[640px] lg:min-h-[740px] rounded-[10px] overflow-hidden pb-24 sm:pb-28">
-          <Header forceSticky />
-          <div className="absolute inset-0 z-0 rounded-[10px] overflow-hidden">
-            {mainImage ? (
-              <Image
-                src={mainImage}
-                alt={destination.country || "Destination"}
-                fill
-                className="object-cover"
-                priority
-              />
-            ) : (
-              <div className="h-full w-full bg-white/5" />
-            )}
-          </div>
-          <div className="absolute bottom-24 left-4 sm:bottom-28 sm:left-6 z-10">
-            <p className="text-xs sm:text-sm text-[color:var(--dest-muted)]">
-              {destination.zone}
-            </p>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
-              {destination.country}
-            </h1>
-            {durationLabel && (
-              <p className="text-sm sm:text-base text-[color:var(--dest-muted)] mt-1">
-                {durationLabel}
-              </p>
-            )}
-          </div>
-
-          {images.length > 0 && (
-            <div className="absolute left-0 right-0 bottom-4 sm:bottom-6 z-20 px-4 sm:px-6">
-              <DestinationImageStrip images={images} />
-            </div>
-          )}
-        </section>
+        <DestinationHero
+          destination={destination}
+          mainImage={mainImage}
+          images={images}
+          durationLabel={durationLabel}
+        />
 
         <section className="mt-6 sm:mt-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2 rounded-2xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-5 sm:p-6">
@@ -188,12 +208,13 @@ export default async function DestinationPage({ params }) {
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {destination.tags.map((tag) => (
-                      <span
+                      <Link
                         key={tag}
-                        className="rounded-full border border-[color:var(--dest-chip-border)] bg-[color:var(--dest-chip)] px-3 py-1 text-xs text-[color:var(--dest-muted)]"
+                        href={{ pathname: "/destinations", query: { tag } }}
+                        className="rounded-full border border-[color:var(--dest-chip-border)] bg-[color:var(--dest-chip)] px-3 py-1 text-xs text-[color:var(--dest-muted)] cursor-pointer transition-colors hover:border-[#df986c] hover:text-[#df986c]"
                       >
                         {tag}
-                      </span>
+                      </Link>
                     ))}
                   </div>
                 </div>
