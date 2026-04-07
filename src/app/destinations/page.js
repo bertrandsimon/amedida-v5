@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Header from "@/components/Header/Header";
 import SiteShell from "@/components/Layout/SiteShell";
 import DestinationsClient from "@/components/Destinations/DestinationsClient";
@@ -37,7 +38,9 @@ export default function DestinationsPage() {
           <p className="mt-2 text-sm sm:text-base text-[#df986c]">
             Parcourez nos destinations et filtrez selon vos envies.
           </p>
-          <DestinationsClient />
+          <Suspense fallback={<div className="text-sm text-[color:var(--dest-muted)]">Chargement...</div>}>
+            <DestinationsClient />
+          </Suspense>
         </div>
       </div>
     </SiteShell>
