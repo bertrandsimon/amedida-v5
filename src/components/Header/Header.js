@@ -100,22 +100,20 @@ export default function Header({ forceSticky = false }) {
         </div>
 
         {/* Mobile Menu Button */}
-        <button
-          type="button"
-          className={`md:hidden flex items-center justify-center h-10 w-10 rounded-full border transition-colors ${
-            effectiveSticky
-              ? "border-black/10 text-black bg-white/80 hover:bg-white"
-              : "border-white/30 text-white bg-black/40 hover:bg-black/60"
-          }`}
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMobileMenuOpen ? (
-            <X className="w-5 h-5" />
-          ) : (
-            <Menu className="w-5 h-5" />
-          )}
-        </button>
+        {effectiveSticky && (
+          <button
+            type="button"
+            className="md:hidden flex items-center justify-center h-10 w-10 rounded-full border transition-colors shadow-md border-black/10 text-black bg-white/90 hover:bg-white"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
+          </button>
+        )}
       </div>
 
       {/* Mobile Menu */}
@@ -123,39 +121,6 @@ export default function Header({ forceSticky = false }) {
         <div className="md:hidden mt-4 pb-4 border-t border-white/20">
           <div className="pt-4 space-y-4">
             <Navigation isSticky={effectiveSticky} theme={theme} />
-            <div className="flex items-center justify-between pt-4">
-              <div className="flex items-center gap-3">
-                {theme === "dark" ? (
-                  <button
-                    type="button"
-                    onClick={toggleTheme}
-                    className="cursor-pointer text-white hover:text-[#df986c] transition-colors p-2"
-                    aria-label="Switch to light mode"
-                  >
-                    <Sun className="w-5 h-5" />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={toggleTheme}
-                    className={`cursor-pointer ${
-                      effectiveSticky ? "text-black" : "text-white"
-                    } hover:text-[#df986c] transition-colors p-2`}
-                    aria-label="Switch to dark mode"
-                  >
-                    <Moon className="w-5 h-5" />
-                  </button>
-                )}
-              </div>
-              <a
-                href="https://calendly.com/paul-dehergne-amedida/"
-                target="_blank"
-                rel="noreferrer"
-                className="cursor-pointer bg-black text-white px-4 py-2 rounded-full text-sm font-poppins hover:bg-[#df986c] transition-colors"
-              >
-                Prendre RDV
-              </a>
-            </div>
           </div>
         </div>
       )}
@@ -165,21 +130,21 @@ export default function Header({ forceSticky = false }) {
   return (
     <>
       {!effectiveSticky && (
-        <header className="absolute top-0 left-0 right-0 z-50 pt-2 sm:pt-4 px-2 sm:px-4">
+        <header className="absolute top-0 left-0 right-0 z-[60] pt-2 sm:pt-4 px-2 sm:px-4">
           {renderHeaderContent()}
         </header>
       )}
       {effectiveSticky && (
         <>
           <div
-            className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[1260px] px-2 sm:px-4 pt-[40px] pb-4 sm:pb-6 ${
+            className={`fixed top-0 left-1/2 -translate-x-1/2 z-[60] w-full max-w-[1260px] px-2 sm:px-4 pt-[40px] pb-4 sm:pb-6 ${
               theme === "light" ? "bg-[#EFEEF1]" : "bg-[#181818]"
             }`}
           >
             <TopToolbar isSticky />
           </div>
           <header
-            className={`fixed top-[90px] left-1/2 -translate-x-1/2 z-50 w-full max-w-[1260px] px-2 sm:px-4 rounded-t-[12px] ${
+            className={`fixed top-[90px] left-1/2 -translate-x-1/2 z-[60] w-full max-w-[1260px] px-2 sm:px-4 rounded-t-[12px] ${
               theme === "light" ? "bg-white" : "bg-black"
             }`}
           >

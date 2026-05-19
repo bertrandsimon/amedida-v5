@@ -5,7 +5,13 @@ import { useEffect, useMemo, useState } from "react";
 import Header from "@/components/Header/Header";
 import DestinationImageStrip from "@/components/Destinations/DestinationImageStrip";
 
-export default function DestinationHero({ destination, mainImage, images, durationLabel }) {
+export default function DestinationHero({
+  zone,
+  country,
+  mainImage,
+  images,
+  durationLabel,
+}) {
   const fallbackImage = useMemo(() => images?.[0] || "", [images]);
   const initialImage = mainImage || fallbackImage;
   const [activeImage, setActiveImage] = useState(initialImage);
@@ -24,7 +30,7 @@ export default function DestinationHero({ destination, mainImage, images, durati
           {displayedImage ? (
             <Image
               src={displayedImage}
-              alt={destination?.country || "Destination"}
+              alt={country || "Destination"}
               fill
               className="object-cover"
               priority
@@ -35,10 +41,10 @@ export default function DestinationHero({ destination, mainImage, images, durati
         </div>
         <div className="absolute bottom-6 left-4 sm:bottom-8 sm:left-6 z-10">
           <p className="text-xs sm:text-sm text-white/80 drop-shadow">
-            {destination?.zone}
+            {zone}
           </p>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white drop-shadow">
-            {destination?.country}
+            {country}
           </h1>
           {durationLabel && (
             <p className="text-sm sm:text-base text-white/80 drop-shadow mt-1">

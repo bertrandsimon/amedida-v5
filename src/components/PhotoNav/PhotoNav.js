@@ -11,6 +11,20 @@ export default function PhotoNav({
   description = "Des expériences uniques pensées pour inspirer vos équipes, avec des destinations soigneusement sélectionnées.",
   tag,
 }) {
+  const displayTag = (() => {
+    if (!tag) {
+      return "";
+    }
+    const map = {
+      "rencontres & emotions": "Rencontres & émotions",
+      "cap soleil": "Cap soleil",
+      "vibrations urbaines": "Vibrations urbaines",
+      "hors des sentiers battus": "Hors des sentiers battus",
+      "connexion nature": "Connexion nature",
+      "sous les flocons": "Sous les flocons",
+    };
+    return map[tag] || tag;
+  })();
   const { theme } = useTheme();
   // Text on photos should be white in light mode
   const textColor = theme === "light" ? "text-white" : "text-white";
@@ -78,9 +92,8 @@ export default function PhotoNav({
             <div
               className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 ease-out group-hover:scale-[1.2]"
               style={{
-                backgroundImage: item?.image
-                  ? `url(${item.image})`
-                  : fallbackColor,
+                backgroundImage: item?.image ? `url(${item.image})` : "none",
+                backgroundColor: item?.image ? "transparent" : fallbackColor,
               }}
             />
             <div className="absolute inset-0 bg-black/15"></div>
@@ -88,9 +101,9 @@ export default function PhotoNav({
         )}
         <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 flex items-start justify-start">
           <div className="flex flex-col">
-            {tag && (
+            {displayTag && (
               <span className="mb-1 inline-flex w-fit rounded-full bg-white/90 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-black">
-                {tag}
+                {displayTag}
               </span>
             )}
             <p className={`${textColor} text-xs sm:text-sm font-medium`}>
@@ -124,7 +137,7 @@ export default function PhotoNav({
             )}
             {renderCard(
               1,
-              "flex-[0.63] sm:flex-[0.63] h-[200px] sm:h-[250px] lg:h-[317px]",
+              "w-full sm:flex-[0.63] h-[200px] sm:h-[250px] lg:h-[317px]",
               "rgba(0, 0, 0, 0.05)",
             )}
           </div>
@@ -132,7 +145,7 @@ export default function PhotoNav({
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
             {renderCard(
               2,
-              "flex-[0.63] sm:flex-[0.63] h-[200px] sm:h-[250px] lg:h-[317px]",
+              "w-full sm:flex-[0.63] h-[200px] sm:h-[250px] lg:h-[317px]",
               "rgba(0, 0, 0, 0.08)",
             )}
             {renderCard(

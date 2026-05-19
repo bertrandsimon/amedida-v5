@@ -126,7 +126,8 @@ export default async function DestinationPage({ params }) {
     <SiteShell showTopToolbar={false}>
       <div className="destination-page mx-auto max-w-[1200px] px-5 py-6 sm:py-10 text-[color:var(--dest-text)]">
         <DestinationHero
-          destination={destination}
+          zone={destination.zone}
+          country={destination.country}
           mainImage={mainImage}
           images={images}
           durationLabel={durationLabel}

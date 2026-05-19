@@ -47,10 +47,11 @@ export default function HomePageClient() {
           onSelectTag={(tag) => {
             setActiveTag(tag);
             if (photoNavRef.current) {
+              const offset = window.innerWidth < 640 ? 120 : 180;
               const top =
                 photoNavRef.current.getBoundingClientRect().top +
                 window.scrollY -
-                180;
+                offset;
               window.scrollTo({ top, behavior: "smooth" });
             }
           }}

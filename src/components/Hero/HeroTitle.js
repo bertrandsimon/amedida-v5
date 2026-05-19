@@ -2,9 +2,9 @@ import Image from "next/image";
 
 export default function HeroTitle() {
   return (
-    <div className="text-center sm:text-right md:pr-40">
+    <div className="text-center sm:text-right md:pr-40 pt-6 sm:pt-0">
       <h1
-        className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-2 font-sans animate__animated animate__fadeInLeftSoft"
+        className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-1 sm:mb-2 font-sans animate__animated animate__fadeInLeftSoft"
         style={{
           animationDelay: "0s",
           animationDuration: "1s",
