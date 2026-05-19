@@ -120,6 +120,7 @@ export default async function DestinationPage({ params }) {
   const durationLabel = destination.duration
     ? `${formatDuration(destination.duration)} de vol`
     : "";
+  const hideDirectFlight = id === "697c6c05ee7d4a8a13b56e0b";
 
   return (
     <SiteShell showTopToolbar={false}>
@@ -161,7 +162,8 @@ export default async function DestinationPage({ params }) {
                   <p>{destination.transport_type}</p>
                 </div>
               )}
-              {typeof destination.direct_flight === "boolean" && (
+              {typeof destination.direct_flight === "boolean" &&
+                !hideDirectFlight && (
                 <div>
                   <p className="text-xs uppercase tracking-wide text-[color:var(--dest-soft)]">
                     Vol direct

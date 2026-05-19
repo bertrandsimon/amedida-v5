@@ -1,13 +1,16 @@
 "use client";
 
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { Moon, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useTheme } from "@/contexts/ThemeContext";
 import { contactInfo } from "@/lib/constants";
 
 export default function TopToolbar({ isSticky = false }) {
-  const { theme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const textColor = theme === "light" ? "text-black" : "text-white";
   const dividerColor = theme === "light" ? "bg-black/30" : "bg-white/30";
   const spacingClass = isSticky ? "mb-2 sm:mb-4" : "";
@@ -17,11 +20,46 @@ export default function TopToolbar({ isSticky = false }) {
   const inputBg = theme === "light" ? "bg-white" : "bg-[#181818]";
   const inputBorder = theme === "light" ? "border-black/20" : "border-white/20";
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <div className="w-full bg-transparent py-2 sm:py-4">
       <div className="w-full max-w-[1260px] mx-auto px-2 sm:px-4">
+        {isSticky && (
+          <div className="flex items-center justify-between gap-3 mb-2 sm:mb-4 md:hidden">
+            {theme === "dark" ? (
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="cursor-pointer text-white hover:text-[#df986c] transition-colors p-2"
+                aria-label="Switch to light mode"
+              >
+                <Sun className="w-5 h-5" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="cursor-pointer text-black hover:text-[#df986c] transition-colors p-2"
+                aria-label="Switch to dark mode"
+              >
+                <Moon className="w-5 h-5" />
+              </button>
+            )}
+            <a
+              href="https://calendly.com/paul-dehergne-amedida/"
+              target="_blank"
+              rel="noreferrer"
+              className="cursor-pointer bg-black text-white px-3 py-2 rounded-full text-xs font-poppins hover:bg-[#df986c] transition-colors"
+            >
+              Prendre RDV
+            </a>
+          </div>
+        )}
         <div
-          className={`flex flex-col sm:flex-row items-start sm:items-center justify-end gap-2 sm:gap-4 ${spacingClass}`}
+          className={`flex w-full flex-row items-center justify-around sm:justify-end gap-2 sm:gap-4 ${spacingClass}`}
         >
           <div className="flex items-center gap-2 sm:gap-3">
             <PhoneIcon className={`w-3 h-3 sm:w-4 sm:h-4 ${textColor}`} />
@@ -46,109 +84,112 @@ export default function TopToolbar({ isSticky = false }) {
         </div>
       </div>
 
-      {isModalOpen && (
-        <>
-          <button
-            type="button"
-            className="fixed inset-0 z-[1000] bg-black/60"
-            onClick={() => setIsModalOpen(false)}
-            aria-label="Close email form"
-          />
-          <div className="fixed inset-0 z-[1001] flex items-center justify-center p-4 pointer-events-none">
-            <div
-              className={`w-full max-w-[520px] rounded-xl border ${modalBorder} ${modalBg} p-5 sm:p-6 ${modalText} pointer-events-auto`}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg sm:text-xl font-semibold">
-                  Envoyer un message
-                </h2>
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="text-sm text-[#9d9d9d] hover:text-[#df986c] transition-colors cursor-pointer"
-                  aria-label="Close email form"
-                >
-                  Fermer
-                </button>
-              </div>
-
-              <form
-                action={`https://formsubmit.co/${contactInfo.email}`}
-                method="POST"
-                className="space-y-3"
-                onKeyDown={(event) => {
-                  if (event.key === "Escape") {
-                    setIsModalOpen(false);
-                  }
-                }}
+      {isModalOpen &&
+        isMounted &&
+        createPortal(
+          <>
+            <button
+              type="button"
+              className="fixed inset-0 z-[2000] bg-black/60"
+              onClick={() => setIsModalOpen(false)}
+              aria-label="Close email form"
+            />
+            <div className="fixed inset-0 z-[2001] flex items-center justify-center p-4 pointer-events-none">
+              <div
+                className={`w-full max-w-[520px] rounded-xl border ${modalBorder} ${modalBg} p-5 sm:p-6 ${modalText} pointer-events-auto`}
               >
-                <input type="hidden" name="_subject" value="Nouveau message" />
-                <input type="hidden" name="_captcha" value="false" />
-                <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="contact-name"
-                    className="text-xs uppercase tracking-wide text-[#9d9d9d]"
-                  >
-                    Nom
-                  </label>
-                  <input
-                    id="contact-name"
-                    type="text"
-                    name="name"
-                    placeholder="Votre nom"
-                    className={`h-10 rounded-md border ${inputBorder} ${inputBg} px-3 text-sm ${modalText} focus:outline-none focus:border-[#df986c] transition-colors`}
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="contact-email"
-                    className="text-xs uppercase tracking-wide text-[#9d9d9d]"
-                  >
-                    Email
-                  </label>
-                  <input
-                    id="contact-email"
-                    type="email"
-                    name="email"
-                    placeholder="Votre email"
-                    className={`h-10 rounded-md border ${inputBorder} ${inputBg} px-3 text-sm ${modalText} focus:outline-none focus:border-[#df986c] transition-colors`}
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="contact-message"
-                    className="text-xs uppercase tracking-wide text-[#9d9d9d]"
-                  >
-                    Message
-                  </label>
-                  <textarea
-                    id="contact-message"
-                    rows={4}
-                    name="message"
-                    placeholder="Votre message"
-                    className={`rounded-md border ${inputBorder} ${inputBg} px-3 py-2 text-sm ${modalText} focus:outline-none focus:border-[#df986c] transition-colors`}
-                  />
-                </div>
-                <div className="flex items-center justify-end gap-2 pt-2">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg sm:text-xl font-semibold">
+                    Envoyer un message
+                  </h2>
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="text-xs sm:text-sm px-3 py-2 rounded-md border border-[#9d9d9d]/40 text-[#9d9d9d] hover:text-white hover:border-[#df986c] transition-colors cursor-pointer"
+                    className="text-sm text-[#9d9d9d] hover:text-[#df986c] transition-colors cursor-pointer"
+                    aria-label="Close email form"
                   >
-                    Annuler
-                  </button>
-                  <button
-                    type="submit"
-                    className="text-xs sm:text-sm px-4 py-2 rounded-md bg-[#c48056] text-white hover:bg-[#df986c] transition-colors cursor-pointer"
-                  >
-                    Envoyer
+                    Fermer
                   </button>
                 </div>
-              </form>
+
+                <form
+                  action={`https://formsubmit.co/${contactInfo.email}`}
+                  method="POST"
+                  className="space-y-3"
+                  onKeyDown={(event) => {
+                    if (event.key === "Escape") {
+                      setIsModalOpen(false);
+                    }
+                  }}
+                >
+                  <input type="hidden" name="_subject" value="Nouveau message" />
+                  <input type="hidden" name="_captcha" value="false" />
+                  <div className="flex flex-col gap-2">
+                    <label
+                      htmlFor="contact-name"
+                      className="text-xs uppercase tracking-wide text-[#9d9d9d]"
+                    >
+                      Nom
+                    </label>
+                    <input
+                      id="contact-name"
+                      type="text"
+                      name="name"
+                      placeholder="Votre nom"
+                      className={`h-10 rounded-md border ${inputBorder} ${inputBg} px-3 text-sm ${modalText} focus:outline-none focus:border-[#df986c] transition-colors`}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label
+                      htmlFor="contact-email"
+                      className="text-xs uppercase tracking-wide text-[#9d9d9d]"
+                    >
+                      Email
+                    </label>
+                    <input
+                      id="contact-email"
+                      type="email"
+                      name="email"
+                      placeholder="Votre email"
+                      className={`h-10 rounded-md border ${inputBorder} ${inputBg} px-3 text-sm ${modalText} focus:outline-none focus:border-[#df986c] transition-colors`}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label
+                      htmlFor="contact-message"
+                      className="text-xs uppercase tracking-wide text-[#9d9d9d]"
+                    >
+                      Message
+                    </label>
+                    <textarea
+                      id="contact-message"
+                      rows={4}
+                      name="message"
+                      placeholder="Votre message"
+                      className={`rounded-md border ${inputBorder} ${inputBg} px-3 py-2 text-sm ${modalText} focus:outline-none focus:border-[#df986c] transition-colors`}
+                    />
+                  </div>
+                  <div className="flex items-center justify-end gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsModalOpen(false)}
+                      className="text-xs sm:text-sm px-3 py-2 rounded-md border border-[#9d9d9d]/40 text-[#9d9d9d] hover:text-white hover:border-[#df986c] transition-colors cursor-pointer"
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      type="submit"
+                      className="text-xs sm:text-sm px-4 py-2 rounded-md bg-[#c48056] text-white hover:bg-[#df986c] transition-colors cursor-pointer"
+                    >
+                      Envoyer
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
-          </div>
-        </>
-      )}
+          </>,
+          document.body,
+        )}
     </div>
   );
 }

@@ -102,14 +102,18 @@ export default function Header({ forceSticky = false }) {
         {/* Mobile Menu Button */}
         <button
           type="button"
-          className="md:hidden text-white p-2"
+          className={`md:hidden flex items-center justify-center h-10 w-10 rounded-full border transition-colors ${
+            effectiveSticky
+              ? "border-black/10 text-black bg-white/80 hover:bg-white"
+              : "border-white/30 text-white bg-black/40 hover:bg-black/60"
+          }`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
         >
           {isMobileMenuOpen ? (
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           ) : (
-            <Menu className="w-6 h-6" />
+            <Menu className="w-5 h-5" />
           )}
         </button>
       </div>

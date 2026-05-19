@@ -107,7 +107,12 @@ export default function PhotoNav({
 
   return (
     <>
-      <Title title1={title} title2={subtitle} description={description} />
+      <Title
+        title1={title}
+        title2={subtitle}
+        description={description}
+        className="pt-2 sm:pt-3 lg:pt-4 pb-3 sm:pb-4"
+      />
       <div className="w-full pb-8 sm:pb-12 lg:pb-30 flex justify-center">
         <div className="flex flex-col gap-3 sm:gap-4 w-full max-w-[1200px] px-4">
           {/* Top row */}

@@ -80,7 +80,7 @@ export default function DestinationsClient() {
       <section className="rounded-2xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-4 sm:p-5">
         <div className="flex flex-col lg:flex-row lg:items-center gap-3 sm:gap-4">
           <select
-            className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
+            className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-black text-white sm:bg-transparent sm:text-[color:var(--dest-text)] px-3 text-sm focus:outline-none"
             value={filters.zone}
             onChange={(event) =>
               setFilters((prev) => ({

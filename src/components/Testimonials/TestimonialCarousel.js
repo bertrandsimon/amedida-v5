@@ -5,7 +5,6 @@ import {
   ArrowLongLeftIcon,
   ArrowLongRightIcon,
 } from "@heroicons/react/24/outline";
-import Image from "next/image";
 import { useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { testimonials } from "@/lib/testimonials";
@@ -15,8 +14,6 @@ export default function TestimonialCarousel() {
   const currentTestimonial = testimonials[currentIndex];
   const { theme } = useTheme();
   const textColor = theme === "light" ? "text-black" : "text-white";
-  const secondaryTextColor =
-    theme === "light" ? "text-gray-600" : "text-[#9ea0a9]";
   const arrowColor = theme === "light" ? "text-gray-400" : "text-white/50";
   const arrowHoverColor =
     theme === "light" ? "hover:text-gray-600" : "hover:text-white";
@@ -38,42 +35,27 @@ export default function TestimonialCarousel() {
           <div className="px-4 sm:px-6 lg:px-10">
             <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
               <div className="flex flex-col flex-shrink-0 w-full sm:w-auto">
-                <div className="flex items-start gap-3 sm:gap-4 pr-0 sm:pr-10 lg:pr-20">
-                  <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex-shrink-0">
-                    <Image
-                      src={currentTestimonial.photo}
-                      alt={currentTestimonial.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <p
-                      className={`${textColor} font-semibold font-poppins text-sm sm:text-base`}
-                    >
-                      {currentTestimonial.name}
-                    </p>
-                    <p
-                      className={`${secondaryTextColor} text-xs sm:text-sm font-poppins`}
-                    >
-                      {currentTestimonial.role}
-                    </p>
-                  </div>
+                <div className="flex items-start pr-0 sm:pr-10 lg:pr-20">
+                  <p
+                    className={`${textColor} font-semibold font-poppins text-sm sm:text-base`}
+                  >
+                    Témoignage client
+                  </p>
                 </div>
-                <div className="mt-3 sm:mt-4 flex gap-2">
+                <div className="mt-3 sm:mt-4 flex gap-3">
                   <button
                     onClick={prevTestimonial}
-                    className={`${arrowColor} ${arrowHoverColor} transition-colors cursor-pointer`}
+                    className={`${arrowColor} ${arrowHoverColor} transition-colors cursor-pointer p-1`}
                     aria-label="Previous testimonial"
                   >
-                    <ArrowLongLeftIcon className="w-4 h-4" />
+                    <ArrowLongLeftIcon className="w-6 h-6" />
                   </button>
                   <button
                     onClick={nextTestimonial}
-                    className={`${arrowColor} ${arrowHoverColor} transition-colors cursor-pointer`}
+                    className={`${arrowColor} ${arrowHoverColor} transition-colors cursor-pointer p-1`}
                     aria-label="Next testimonial"
                   >
-                    <ArrowLongRightIcon className="w-4 h-4" />
+                    <ArrowLongRightIcon className="w-6 h-6" />
                   </button>
                 </div>
               </div>

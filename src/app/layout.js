@@ -28,7 +28,38 @@ export const metadata = {
   title: "AMEDIDA - Voyages de récompense sur mesure",
   description: "Fabrique de magie événementielle dédiée au tourisme d'affaires",
   icons: {
-    icon: "/images/cropped-favicon-32x32.png",
+    icon: [
+      {
+        url: "/favicon/favicon-light-mode/favicon.svg",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/favicon/favicon-dark-mode/favicon.svg",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/favicon/favicon-light-mode/favicon-96x96.png",
+        type: "image/png",
+        sizes: "96x96",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/favicon/favicon-dark-mode/favicon-96x96.png",
+        type: "image/png",
+        sizes: "96x96",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
+    apple: [
+      {
+        url: "/favicon/favicon-light-mode/apple-touch-icon.png",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/favicon/favicon-dark-mode/apple-touch-icon.png",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
   },
   openGraph: {
     type: "website",

@@ -63,9 +63,25 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-[#4e4e4e]">
-          <p className="text-white text-xs sm:text-sm lg:text-base font-poppins text-center">
-            2026 Amedia. Droits réservés
-          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-[11px] sm:text-xs font-poppins text-[#c2c2c2]">
+            <span>2026 Amedia. Droits réservés</span>
+            <span className="hidden sm:inline">·</span>
+            <Link
+              href="/mentions-legales"
+              className="hover:text-white transition-colors"
+            >
+              Mentions légales
+            </Link>
+            <span className="hidden sm:inline">·</span>
+            <a
+              href="https://logeen.com"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-white transition-colors"
+            >
+              Conception du site
+            </a>
+          </div>
         </div>
       </div>
     </footer>

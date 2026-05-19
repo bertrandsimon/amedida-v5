@@ -22,7 +22,7 @@ export default function ThemeCard({ theme, onSelect }) {
           className="object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
         />
       </div>
-      <p className={`text-center ${textColor} text-sm sm:text-[15px] lg:text-[16px] mt-2 font-poppins w-[180px] sm:w-[200px] lg:w-[210px]`}>
+      <p className={`text-center ${textColor} text-xs sm:text-[13px] lg:text-[14px] mt-2 font-poppins w-[180px] sm:w-[200px] lg:w-[210px]`}>
         {theme.title === "rencontres & emotions" ? (
           <>
             <span className="font-light">rencontres </span>
@@ -33,15 +33,15 @@ export default function ThemeCard({ theme, onSelect }) {
             <span className="font-light">cap </span>
             <span className="font-bold">soleil</span>
           </>
-        ) : theme.title === "vivrations urbaines" ? (
+        ) : theme.title === "vibrations urbaines" ? (
           <>
-            <span className="font-light">vivrations </span>
+            <span className="font-light">vibrations </span>
             <span className="font-bold">urbaines</span>
           </>
-        ) : theme.title === "hors des sentiers" ? (
+        ) : theme.title === "hors des sentiers battus" ? (
           <>
             <span className="font-light">hors des </span>
-            <span className="font-bold">sentiers</span>
+            <span className="font-bold">sentiers battus</span>
           </>
         ) : (
           <span className="font-light">{theme.title}</span>

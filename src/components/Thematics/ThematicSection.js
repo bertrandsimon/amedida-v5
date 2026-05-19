@@ -13,23 +13,29 @@ import ThemeCard from "./ThemeCard";
 const tagMap = {
   "rencontres & emotions": "Rencontres & émotions",
   "cap soleil": "Cap soleil",
-  "vivrations urbaines": "Vibrations urbaines",
-  "hors des sentiers": "Hors des sentiers",
+  "vibrations urbaines": "Vibrations urbaines",
+  "hors des sentiers battus": "Hors des sentiers battus",
+  "connexion nature": "Connexion nature",
+  "sous les flocons": "Sous les flocons",
 };
 
 export default function ThematicSection({ onSelectTag }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   // Responsive: 1 card on mobile, 2 on tablet, 4 on desktop
   const [visibleCards, setVisibleCards] = useState(4);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const updateVisibleCards = () => {
       if (window.innerWidth < 640) {
         setVisibleCards(1);
+        setIsMobile(true);
       } else if (window.innerWidth < 1024) {
         setVisibleCards(2);
+        setIsMobile(false);
       } else {
         setVisibleCards(4);
+        setIsMobile(false);
       }
     };
 
@@ -58,6 +64,9 @@ export default function ThematicSection({ onSelectTag }) {
 
   // Auto-rotate carousel
   useEffect(() => {
+    if (isMobile) {
+      return undefined;
+    }
     const interval = setInterval(() => {
       setCurrentIndex((prev) => {
         const nextGroup = prev + 1;
@@ -66,7 +75,7 @@ export default function ThematicSection({ onSelectTag }) {
     }, 5000); // Rotate every 5 seconds
 
     return () => clearInterval(interval);
-  }, [maxGroupIndex]);
+  }, [maxGroupIndex, isMobile]);
 
   const { theme } = useTheme();
   // Keep "une thematique inspirante" white in light mode (over imagery)
@@ -86,9 +95,9 @@ export default function ThematicSection({ onSelectTag }) {
     <section className="w-full py-8 sm:py-12 lg:py-16 relative z-20">
       <div className="container max-w-[1200px] px-4">
         <div className="w-full">
-          <div className="flex items-center justify-end mb-4 sm:mb-6 relative z-20 pr-0 sm:pr-10 lg:pr-40">
+          <div className="flex items-center justify-center sm:justify-end mb-4 sm:mb-6 relative z-20 pr-0 sm:pr-10 lg:pr-40">
             <div
-              className={`${textColor} text-sm sm:text-base lg:text-lg relative z-20 font-poppins`}
+              className={`${textColor} text-sm sm:text-base lg:text-lg relative z-20 font-poppins text-center sm:text-left`}
             >
               une <span>thématique</span>{" "}
               <span className="font-display ">inspirante</span> ?
@@ -108,28 +117,19 @@ export default function ThematicSection({ onSelectTag }) {
             <button
               type="button"
               onClick={prevSlide}
-              className={`hidden sm:flex cursor-pointer z-10 p-2 ${arrowColor} hover:text-[#df986c] transition-colors items-center h-full mr-2 sm:mr-4 lg:mr-[30px]`}
+              className={`hidden sm:flex cursor-pointer z-10 p-2 ${arrowColor} hover:text-[#df986c] transition-colors items-center h-full mr-1 sm:mr-2 lg:mr-3`}
               aria-label="Previous"
             >
               <ArrowLongLeftIcon className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
 
             {/* Carousel Container */}
-            <div
-              className="overflow-hidden mx-auto w-full sm:w-auto"
-              style={{ maxWidth: `${containerWidth}px` }}
-            >
-              <div
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{
-                  gap: `${gap}px`,
-                  transform: `translateX(-${currentIndex * (visibleCards * (cardWidth + gap))}px)`,
-                }}
-              >
+            {isMobile ? (
+              <div className="grid grid-cols-2 gap-4 w-full">
                 {themes.map((theme) => {
                   const tag = tagMap[theme.title] || theme.title;
                   return (
-                    <div key={theme.id} className="flex-shrink-0">
+                    <div key={theme.id} className="flex justify-center">
                       <ThemeCard
                         theme={theme}
                         onSelect={() => onSelectTag?.(tag)}
@@ -138,13 +138,38 @@ export default function ThematicSection({ onSelectTag }) {
                   );
                 })}
               </div>
-            </div>
+            ) : (
+              <div
+                className="overflow-hidden mx-auto w-full sm:w-auto"
+                style={{ maxWidth: `${containerWidth}px` }}
+              >
+                <div
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{
+                    gap: `${gap}px`,
+                    transform: `translateX(-${currentIndex * (visibleCards * (cardWidth + gap))}px)`,
+                  }}
+                >
+                  {themes.map((theme) => {
+                    const tag = tagMap[theme.title] || theme.title;
+                    return (
+                      <div key={theme.id} className="flex-shrink-0">
+                        <ThemeCard
+                          theme={theme}
+                          onSelect={() => onSelectTag?.(tag)}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Right Arrow */}
             <button
               type="button"
               onClick={nextSlide}
-              className={`hidden sm:flex cursor-pointer z-10 p-2 ${arrowColor} hover:text-[#df986c] transition-colors items-center h-full ml-2 sm:ml-4 lg:ml-[30px]`}
+              className={`hidden sm:flex cursor-pointer z-10 p-2 ${arrowColor} hover:text-[#df986c] transition-colors items-center h-full ml-1 sm:ml-2 lg:ml-3`}
               aria-label="Next"
             >
               <ArrowLongRightIcon className="w-5 h-5 sm:w-6 sm:h-6" />

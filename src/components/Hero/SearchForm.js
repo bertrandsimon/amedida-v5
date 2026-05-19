@@ -14,10 +14,10 @@ export default function SearchForm({ onSelection }) {
   ];
 
   return (
-    <div className="bg-black/80 backdrop-blur-sm rounded-full w-full max-w-fit mx-auto p-2 sm:p-3">
+    <div className="bg-black/80 backdrop-blur-sm rounded-2xl sm:rounded-full w-full max-w-fit mx-auto p-2 sm:p-3">
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 lg:gap-4">
         {/* Type de voyage */}
-        <div className="flex items-center gap-2 sm:gap-3 border-b sm:border-b-0 sm:border-r border-white/80 pb-2 sm:pb-0 pr-0 sm:pr-3 lg:pr-4 pl-2 sm:pl-3 lg:pl-4">
+        <div className="flex items-center gap-2 sm:gap-3 border-b sm:border-b-0 sm:border-r border-white/80 pb-2 sm:pb-0 pr-0 sm:pr-3 lg:pr-4 pl-2 sm:pl-3 lg:pl-4 bg-black/85 sm:bg-transparent rounded-xl sm:rounded-none px-3 sm:px-0">
           <Plane className="w-4 h-4 sm:w-5 sm:h-5 lg:w-[20px] lg:h-[20px] text-white flex-shrink-0" />
           <select
             className="bg-transparent text-white placeholder-white/50 focus:outline-none transition-colors py-2 text-sm sm:text-base w-full sm:min-w-[100px] lg:min-w-[120px]"
@@ -40,7 +40,7 @@ export default function SearchForm({ onSelection }) {
         </div>
 
         {/* Période */}
-        <div className="flex items-center gap-2 sm:gap-3 border-b sm:border-b-0 sm:border-r border-white/80 pb-2 sm:pb-0 pr-0 sm:pr-3 lg:pr-4 pl-2">
+        <div className="flex items-center gap-2 sm:gap-3 border-b sm:border-b-0 sm:border-r border-white/80 pb-2 sm:pb-0 pr-0 sm:pr-3 lg:pr-4 pl-2 bg-black/85 sm:bg-transparent rounded-xl sm:rounded-none px-3 sm:px-0">
           <CalendarDays className="w-4 h-4 sm:w-5 sm:h-5 lg:w-[20px] lg:h-[20px] text-white flex-shrink-0" />
           <select
             className="bg-transparent text-white placeholder-white/50 focus:outline-none transition-colors py-2 text-sm sm:text-base w-full sm:min-w-[100px] lg:min-w-[120px]"
@@ -63,7 +63,7 @@ export default function SearchForm({ onSelection }) {
         </div>
 
         {/* Faites moi rêver */}
-        <div className="relative group">
+        <div className="relative group bg-black/85 sm:bg-transparent rounded-xl sm:rounded-none px-3 sm:px-0">
           <button
             className="flex items-center gap-2 sm:gap-3 border-b sm:border-b-0 sm:border-r border-white/80 pb-2 sm:pb-0 pr-0 sm:pr-3 lg:pr-4 pl-2 cursor-pointer"
             onClick={() => {
@@ -100,7 +100,7 @@ export default function SearchForm({ onSelection }) {
 
         {/* Voyager Button */}
         <button
-          className="animated-button self-center sm:self-auto mt-2 sm:mt-0"
+          className="animated-button self-center sm:self-auto mt-2 sm:mt-0 !w-[42px] !h-[42px] sm:!w-[60px] sm:!h-[60px] bg-black/85 sm:bg-white"
           onClick={() => {
             if (!selectedFlightType) {
               return;
