@@ -50,8 +50,8 @@ export default function Selection({
         description="Découvrez trois destinations sélectionnées selon vos envies."
       />
       {filterLabel && (
-        <div className="flex justify-end mb-4">
-          <div className="text-white text-xs sm:text-sm text-right">
+        <div className="flex justify-start mb-4 px-4 sm:px-6">
+          <div className="text-white text-xs sm:text-sm text-left">
             {filterLabel}
           </div>
         </div>

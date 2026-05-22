@@ -101,6 +101,12 @@
   transition-delay: 0.25s;
 }
 
+.animated-button-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .animated-button--small {
   width: 24px;
   height: 24px;
@@ -112,5 +118,40 @@
     width: 32px;
     height: 32px;
     border-radius: 32px;
+  }
+}
+
+@media (hover: none) {
+  .animated-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .animated-button:hover {
+    width: 42px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .animated-button:hover .animated-button-text {
+    transform: none;
+    color: #000;
+  }
+
+  .animated-button:hover .animated-button-title {
+    transform: scale(0);
+  }
+
+  .animated-button-title {
+    display: none;
+  }
+
+  .animated-button:active::before,
+  .animated-button:focus-visible::before {
+    opacity: 1;
+  }
+
+  .animated-button:active .animated-button-text,
+  .animated-button:focus-visible .animated-button-text {
+    color: #fff;
   }
 }

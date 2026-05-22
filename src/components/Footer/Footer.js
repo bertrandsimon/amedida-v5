@@ -49,7 +49,7 @@ export default function Footer() {
                 name="phone"
                 placeholder="Téléphone"
                 required
-                className="bg-black border border-[#4e4e4e] rounded-[6px] h-[34px] px-3 text-white text-sm sm:text-base font-poppins focus:outline-none focus:border-[#DF986C] transition-colors w-full sm:w-[200px] lg:w-[270px]"
+                className="bg-black border border-[#4e4e4e] rounded-[6px] h-[34px] px-3 text-white text-xs sm:text-sm font-poppins focus:outline-none focus:border-[#DF986C] transition-colors w-full sm:w-[200px] lg:w-[270px]"
               />
               <button
                 type="submit"
