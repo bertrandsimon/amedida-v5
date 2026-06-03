@@ -21,8 +21,8 @@ const tagMap = {
 
 export default function ThematicSection({ onSelectTag }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  // Responsive: 1 card on mobile, 2 on tablet, 4 on desktop
-  const [visibleCards, setVisibleCards] = useState(4);
+  // Responsive: 1 card on mobile, 2 on tablet, 3 on desktop
+  const [visibleCards, setVisibleCards] = useState(3);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function ThematicSection({ onSelectTag }) {
         setVisibleCards(2);
         setIsMobile(false);
       } else {
-        setVisibleCards(4);
+        setVisibleCards(3);
         setIsMobile(false);
       }
     };
@@ -89,15 +89,15 @@ export default function ThematicSection({ onSelectTag }) {
       ? cardWidth
       : visibleCards === 2
         ? cardWidth * 2 + gap
-        : cardWidth * 4 + gap * 3;
+        : cardWidth * 3 + gap * 2;
 
   return (
     <section className="w-full py-8 sm:py-12 lg:py-16 relative z-20">
       <div className="container max-w-[1200px] px-4">
         <div className="w-full">
-          <div className="flex items-center justify-center sm:justify-end mb-4 sm:mb-6 relative z-20 pr-0 sm:pr-10 lg:pr-40">
+          <div className="flex items-center justify-center mb-4 sm:mb-6 relative z-20">
             <div
-              className={`${textColor} text-sm sm:text-base lg:text-lg relative z-20 font-poppins text-center sm:text-left`}
+              className={`${textColor} text-sm sm:text-base lg:text-lg relative z-20 font-poppins text-center`}
             >
               une <span>thématique</span>{" "}
               <span className="font-display ">inspirante</span> ?

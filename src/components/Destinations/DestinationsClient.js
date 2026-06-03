@@ -16,6 +16,7 @@ export default function DestinationsClient() {
     favorite: false,
     country: "",
   });
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetch("/api/destinations?all=true")
@@ -58,6 +59,14 @@ export default function DestinationsClient() {
     return destinations.filter((destination) => {
       if (filters.zone && destination.zone !== filters.zone) return false;
       if (filters.country && destination.country !== filters.country) return false;
+      if (
+        searchTerm &&
+        !destination.country
+          ?.toLowerCase()
+          .includes(searchTerm.trim().toLowerCase())
+      ) {
+        return false;
+      }
       if (filters.directFlight !== "") {
         if (filters.directFlight === "true" && !destination.direct_flight)
           return false;
@@ -68,7 +77,7 @@ export default function DestinationsClient() {
       if (filters.favorite && !destination.favorite) return false;
       return true;
     });
-  }, [destinations, filters]);
+  }, [destinations, filters, searchTerm]);
 
   const activeTag = filters.tag;
   const countryOptions = filters.zone
@@ -78,96 +87,109 @@ export default function DestinationsClient() {
   return (
     <div className="mt-6 sm:mt-8">
       <section className="rounded-2xl border border-[color:var(--dest-border)] bg-[color:var(--dest-panel)] p-4 sm:p-5">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-3 sm:gap-4">
-          <select
-            className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-black text-white sm:bg-transparent sm:text-[color:var(--dest-text)] px-4 text-sm focus:outline-none w-full sm:w-auto"
-            value={filters.zone}
-            onChange={(event) =>
-              setFilters((prev) => ({
-                ...prev,
-                zone: event.target.value,
-                country: "",
-              }))
-            }
-          >
-            <option value="">Tous</option>
-            {options.zones.map((zone) => (
-              <option key={zone} value={zone}>
-                {zone}
-              </option>
-            ))}
-          </select>
-          {filters.zone && (
-            <select
-              className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
-              value={filters.country}
-              onChange={(event) =>
-                setFilters((prev) => ({
-                  ...prev,
-                  country: event.target.value,
-                }))
-              }
-            >
-              <option value="">Tous</option>
-              {countryOptions.map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 sm:gap-5">
+          <div className="flex flex-col gap-3 sm:gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-3 sm:gap-4">
+              <select
+                className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-black text-white sm:bg-transparent sm:text-[color:var(--dest-text)] px-4 text-sm focus:outline-none w-full sm:w-auto"
+                value={filters.zone}
+                onChange={(event) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    zone: event.target.value,
+                    country: "",
+                  }))
+                }
+              >
+                <option value="">Tous</option>
+                {options.zones.map((zone) => (
+                  <option key={zone} value={zone}>
+                    {zone}
+                  </option>
+                ))}
+              </select>
+              {filters.zone && (
+                <select
+                  className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
+                  value={filters.country}
+                  onChange={(event) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      country: event.target.value,
+                    }))
+                  }
+                >
+                  <option value="">Tous</option>
+                  {countryOptions.map((country) => (
+                    <option key={country} value={country}>
+                      {country}
+                    </option>
+                  ))}
+                </select>
+              )}
+              <select
+                className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
+                value={filters.directFlight}
+                onChange={(event) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    directFlight: event.target.value,
+                  }))
+                }
+              >
+                <option value="">Vol direct</option>
+                <option value="true">Oui</option>
+                <option value="false">Non</option>
+              </select>
+              <button
+                type="button"
+                onClick={() =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    favorite: !prev.favorite,
+                  }))
+                }
+                className="animated-button animated-button--small self-start lg:self-auto"
+              >
+                <span className="animated-button-text inline-flex items-center gap-1">
+                  {filters.favorite ? "Faîtes moi rêver" : <Heart className="h-4 w-4" />}
+                </span>
+                <span className="animated-button-title text-xs font-poppins">
+                  Nos coups de coeur
+                </span>
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {options.tags.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      tag: prev.tag === tag ? "" : tag,
+                    }))
+                  }
+                  className={`rounded-full border px-3 py-1 text-xs transition-colors cursor-pointer hover:border-[color:var(--dest-text)] hover:text-[color:var(--dest-text)] ${
+                    activeTag === tag
+                      ? "border-[#df986c] text-[#df986c]"
+                      : "border-[color:var(--dest-chip-border)] text-[color:var(--dest-muted)]"
+                  }`}
+                >
+                  {tag}
+                </button>
               ))}
-            </select>
-          )}
-          <select
-            className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
-            value={filters.directFlight}
-            onChange={(event) =>
-              setFilters((prev) => ({
-                ...prev,
-                directFlight: event.target.value,
-              }))
-            }
-          >
-            <option value="">Vol direct</option>
-            <option value="true">Oui</option>
-            <option value="false">Non</option>
-          </select>
-          <button
-            type="button"
-            onClick={() =>
-              setFilters((prev) => ({
-                ...prev,
-                favorite: !prev.favorite,
-              }))
-            }
-            className="animated-button animated-button--small self-start lg:self-auto"
-          >
-            <span className="animated-button-text inline-flex items-center gap-1">
-              {filters.favorite ? "Faîtes moi rêver" : <Heart className="h-4 w-4" />}
-            </span>
-            <span className="animated-button-title text-xs font-poppins">
-              Nos coups de coeur
-            </span>
-          </button>
-        </div>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {options.tags.map((tag) => (
-            <button
-              key={tag}
-              type="button"
-              onClick={() =>
-                setFilters((prev) => ({
-                  ...prev,
-                  tag: prev.tag === tag ? "" : tag,
-                }))
-              }
-              className={`rounded-full border px-3 py-1 text-xs transition-colors cursor-pointer hover:border-[color:var(--dest-text)] hover:text-[color:var(--dest-text)] ${
-                activeTag === tag
-                  ? "border-[#df986c] text-[#df986c]"
-                  : "border-[color:var(--dest-chip-border)] text-[color:var(--dest-muted)]"
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
+            </div>
+          </div>
+          <div className="w-full lg:max-w-[260px] lg:pt-1">
+            <input
+              type="text"
+              placeholder="Rechercher"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none w-full"
+            />
+          </div>
         </div>
       </section>
 
@@ -203,11 +225,17 @@ export default function DestinationsClient() {
                   {destination.country}
                 </h3>
                 <p className="text-xs text-[color:var(--dest-soft)] mt-1">
-                  {destination.flight_type
-                    ? destination.flight_type.charAt(0).toUpperCase() +
-                      destination.flight_type.slice(1).replace("_", " ")
-                    : ""}{" "}
-                  · {destination.direct_flight ? "Vol direct" : "Avec escale"}
+                  {destination.transport_type === "Train"
+                    ? "Train"
+                    : destination.flight_type
+                      ? `${destination.flight_type
+                          .charAt(0)
+                          .toUpperCase()}${destination.flight_type
+                          .slice(1)
+                          .replace("_", " ")} · ${
+                          destination.direct_flight ? "Vol direct" : "Avec escale"
+                        }`
+                      : ""}
                 </p>
                 {Array.isArray(destination.tags) &&
                   destination.tags.length > 0 && (

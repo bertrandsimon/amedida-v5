@@ -43,6 +43,16 @@ export default function ThemeCard({ theme, onSelect }) {
             <span className="font-light">hors des </span>
             <span className="font-bold">sentiers battus</span>
           </>
+        ) : theme.title === "connexion nature" ? (
+          <>
+            <span className="font-light">connexion </span>
+            <span className="font-bold">nature</span>
+          </>
+        ) : theme.title === "sous les flocons" ? (
+          <>
+            <span className="font-light">sous les </span>
+            <span className="font-bold">flocons</span>
+          </>
         ) : (
           <span className="font-light">{theme.title}</span>
         )}
