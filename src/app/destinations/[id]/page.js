@@ -117,8 +117,13 @@ export default async function DestinationPage({ params }) {
     }
     return value.replace(/h/i, " h ").replace(/\s+/g, " ").trim();
   };
+  const formatTransportType = (type) => {
+    if (type === "Flight") return "Avion";
+    return type;
+  };
+  const isTrainTransport = destination.transport_type === "Train";
   const durationLabel = destination.duration
-    ? `${formatDuration(destination.duration)} de vol`
+    ? `${formatDuration(destination.duration)} ${isTrainTransport ? "de train" : "de vol"}`
     : "";
   const hideDirectFlight = id === "697c6c05ee7d4a8a13b56e0b";
 
@@ -160,11 +165,12 @@ export default async function DestinationPage({ params }) {
                   <p className="text-xs uppercase tracking-wide text-[color:var(--dest-soft)]">
                     Transport
                   </p>
-                  <p>{destination.transport_type}</p>
+                  <p>{formatTransportType(destination.transport_type)}</p>
                 </div>
               )}
               {typeof destination.direct_flight === "boolean" &&
-                !hideDirectFlight && (
+                !hideDirectFlight &&
+                !isTrainTransport && (
                 <div>
                   <p className="text-xs uppercase tracking-wide text-[color:var(--dest-soft)]">
                     Vol direct
@@ -172,7 +178,7 @@ export default async function DestinationPage({ params }) {
                   <p>{destination.direct_flight ? "Oui" : "Non"}</p>
                 </div>
               )}
-              {destination.time_difference && (
+              {destination.time_difference && !isTrainTransport && (
                 <div>
                   <p className="text-xs uppercase tracking-wide text-[color:var(--dest-soft)]">
                     Décalage horaire

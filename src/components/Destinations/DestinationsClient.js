@@ -149,15 +149,36 @@ export default function DestinationsClient() {
                     favorite: !prev.favorite,
                   }))
                 }
-                className="animated-button animated-button--small self-start lg:self-auto"
+                className={`lg:hidden h-10 rounded-lg border px-3 text-sm inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap ${
+                  filters.favorite
+                    ? "border-[#df986c] text-[#df986c]"
+                    : "border-[color:var(--dest-border)] text-[color:var(--dest-text)]"
+                }`}
               >
-                <span className="animated-button-text inline-flex items-center gap-1">
-                  {filters.favorite ? "Faîtes moi rêver" : <Heart className="h-4 w-4" />}
-                </span>
-                <span className="animated-button-title text-xs font-poppins">
-                  Nos coups de coeur
-                </span>
+                <Heart
+                  className={`h-4 w-4 shrink-0 ${filters.favorite ? "fill-current" : ""}`}
+                />
+                Nos coups de coeur
               </button>
+              <div className="hidden lg:block self-start lg:self-auto">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      favorite: !prev.favorite,
+                    }))
+                  }
+                  className="animated-button animated-button--small"
+                >
+                  <span className="animated-button-text inline-flex items-center gap-1">
+                    {filters.favorite ? "Faîtes moi rêver" : <Heart className="h-4 w-4" />}
+                  </span>
+                  <span className="animated-button-title text-xs font-poppins">
+                    Nos coups de coeur
+                  </span>
+                </button>
+              </div>
             </div>
             <div className="flex flex-wrap gap-2">
               {options.tags.map((tag) => (
