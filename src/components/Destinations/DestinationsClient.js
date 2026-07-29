@@ -83,6 +83,8 @@ export default function DestinationsClient() {
   const countryOptions = filters.zone
     ? Array.from(options.countriesByZone.get(filters.zone) || []).sort()
     : [];
+  const selectClassName =
+    "dest-select h-10 rounded-lg border border-[color:var(--dest-border)] px-3 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#df986c]/50 w-full sm:w-auto";
 
   return (
     <div className="mt-6 sm:mt-8">
@@ -91,7 +93,7 @@ export default function DestinationsClient() {
           <div className="flex flex-col gap-3 sm:gap-4">
             <div className="flex flex-col lg:flex-row lg:items-center gap-3 sm:gap-4">
               <select
-                className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-black text-white sm:bg-transparent sm:text-[color:var(--dest-text)] px-4 text-sm focus:outline-none w-full sm:w-auto"
+                className={selectClassName}
                 value={filters.zone}
                 onChange={(event) =>
                   setFilters((prev) => ({
@@ -110,7 +112,7 @@ export default function DestinationsClient() {
               </select>
               {filters.zone && (
                 <select
-                  className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
+                  className={selectClassName}
                   value={filters.country}
                   onChange={(event) =>
                     setFilters((prev) => ({
@@ -128,7 +130,7 @@ export default function DestinationsClient() {
                 </select>
               )}
               <select
-                className="h-10 rounded-lg border border-[color:var(--dest-border)] bg-transparent px-3 text-sm text-[color:var(--dest-text)] focus:outline-none"
+                className={selectClassName}
                 value={filters.directFlight}
                 onChange={(event) =>
                   setFilters((prev) => ({
@@ -172,7 +174,9 @@ export default function DestinationsClient() {
                   className="animated-button animated-button--small"
                 >
                   <span className="animated-button-text inline-flex items-center gap-1">
-                    {filters.favorite ? "Faîtes moi rêver" : <Heart className="h-4 w-4" />}
+                    <Heart
+                      className={`h-4 w-4 ${filters.favorite ? "fill-current" : ""}`}
+                    />
                   </span>
                   <span className="animated-button-title text-xs font-poppins">
                     Nos coups de coeur
