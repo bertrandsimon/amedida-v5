@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "@/contexts/ThemeContext";
+import QuiSommesNousText from "@/components/Editorial/QuiSommesNousText";
 
 export default function Editorial() {
   const { theme } = useTheme();
@@ -12,14 +13,7 @@ export default function Editorial() {
         <p className={`${textColor} text-sm sm:text-base lg:text-lg`}>
           Qui sommes-nous ?
         </p>
-        <p className={`${textColor} text-sm mt-2 leading-relaxed`}>
-          Amedida, un nom qui évoque le « sur-mesure » en portugais, est notre
-          signature. Nous sommes une agence événementielle dédiée au tourisme
-          d'affaires, prête à servir les entreprises qui veulent faire de chaque
-          événement un cocktail parfait de professionnalisme et de souvenirs
-          inoubliables. Et ne vous inquiétez pas, pas besoin de parler portugais
-          pour nous comprendre, nous nous adaptons aussi « à medida » !
-        </p>
+        <QuiSommesNousText className={`${textColor} text-sm mt-4 sm:mt-5`} />
       </div>
       <div>
         <p className={`${textColor} text-sm sm:text-base lg:text-lg`}>

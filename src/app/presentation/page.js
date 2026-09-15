@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Sparkles, Users, Globe2, Target } from "lucide-react";
 import Header from "@/components/Header/Header";
 import SiteShell from "@/components/Layout/SiteShell";
+import QuiSommesNousText from "@/components/Editorial/QuiSommesNousText";
 
 export const metadata = {
   title: "Présentation | AMEDIDA",
@@ -38,14 +39,7 @@ export default function PresentationPage() {
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[color:var(--dest-text)] mt-20">
                 Qui sommes-nous ?
               </h1>
-              <p className="mt-4 text-sm sm:text-base leading-relaxed text-[color:var(--dest-muted)]">
-                Amedida, un nom qui évoque le « sur-mesure » en portugais, est notre
-                signature. Nous sommes une agence événementielle dédiée au tourisme
-                d'affaires, prête à servir les entreprises qui veulent faire de chaque
-                événement un cocktail parfait de professionnalisme et de souvenirs
-                inoubliables. Et ne vous inquiétez pas, pas besoin de parler portugais
-                pour nous comprendre, nous nous adaptons aussi « à medida » !
-              </p>
+              <QuiSommesNousText className="mt-6 sm:mt-8 text-sm sm:text-base text-[color:var(--dest-muted)]" />
               <p className="mt-6 text-sm sm:text-base font-semibold text-[color:var(--dest-text)]">
                 AMEDIDA
               </p>
